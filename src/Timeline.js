@@ -43,7 +43,7 @@ function Timeline() {
   const computePeople = (items, min, max) => {
     let people = []
 
-    const minPeople = items.reduce((acc, val) => val.start < acc ? val.start:acc, 100000)
+    // const minPeople = items.reduce((acc, val) => val.start < acc ? val.start:acc, 100000)
 
     for(let i=0 ; i< items.length ; i++) {
       const item = items[i]
