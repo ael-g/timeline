@@ -1,0 +1,89 @@
+{
+    "events": [
+
+    ],
+    "periods": [
+        {
+            "name": "École des annales",
+            "start": 1929,
+            "end": 1980
+        },
+        {
+            "name": "Nouvelle Histoire",
+            "start": 1972,
+            "end": 2010
+        },
+        {
+            "name": "École méthodique",
+            "start": 1876,
+            "end": 1910
+        }
+    ],
+    "people": [
+        {
+            "start": 1844,
+            "end": 1912,
+            "name": "Gabriel Monod"
+        },
+        {
+            "start": 1828,
+            "end": 1893,
+            "name": "Hippolyte Taine"
+        },
+        {
+            "start": 1854,
+            "end": 1942,
+            "name": "Charles Seignobos"
+        },
+        {
+            "start": 1842,
+            "end": 1922,
+            "name": "Ernest Lavisse"
+        },
+        {
+            "start": 1878,
+            "end": 1956,
+            "name": "Lucien Febvre"
+        },
+        {
+            "start": 1902,
+            "end": 1985,
+            "name": "Fernand Braudel"
+        },
+        {
+            "start": 1919,
+            "end": 1996,
+            "name": "Georges Duby"
+        },
+        {
+            "start": 1924,
+            "end": 2014,
+            "name": "Jacques Le Goff"
+        },
+        {
+            "start": 1930,
+            "end": 2006,
+            "name": "Pierre Vidal-Naquet"
+        },
+        {
+            "start": 1913,
+            "end": 2010,
+            "name": "Jacqueline de Romilly"
+        },
+        {
+            "start": 1912,
+            "end": 1986,
+            "name": "Moses Finley"
+        },
+        {
+            "start": 1882,
+            "end": 1962,
+            "name": "Louis Gernet"
+        },
+        {
+            "start": 1914,
+            "end": 2007,
+            "name": "Jean-Pierre Vernant"
+        }
+    ]
+}
