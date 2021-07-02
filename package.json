@@ -1,5 +1,6 @@
 {
   "name": "timeline",
+  "homepage": "https://ael-g.github.io/timeline/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
