@@ -57,7 +57,7 @@ function Timeline() {
   }
 
   useEffect(() => {
-    fetch('/items.json')
+    fetch(`${process.env.PUBLIC_URL}/items.json`)
         .then(response => response.json())
         .then((data) => {
             const {min, max} = getTimelineRange(data.periods.concat(data.people));
@@ -74,17 +74,17 @@ function Timeline() {
     <div className="App">
       {
         state.centuries.map(c => 
-          <a key={c.year} className="Centuries" style={{width: `${c.width}%`, left: `${c.left}%`}}>{c.year}</a>
+          <a href='' key={c.year} className="Centuries" style={{width: `${c.width}%`, left: `${c.left}%`}}>{c.year}</a>
         )
       }
       {
         state.periods.map(i => 
-          <a key={i.start} className="Periods" style={{width: `${i.width}%`, left: `${i.left}%`}}><div className="Left">{i.start}</div><div className="Centered">{i.name}</div><div className="Right">{i.end}</div></a>
+          <a href='' key={i.start} className="Periods" style={{width: `${i.width}%`, left: `${i.left}%`}}><div className="Left">{i.start}</div><div className="Centered">{i.name}</div><div className="Right">{i.end}</div></a>
         )
       }
       {
         state.people.map(i => 
-          <a key={i.start} className="People" style={{width: `${i.width}%`, left: `${i.left}%`, "marginTop": `${i.marginTop}%`}}><div className="Left">{i.start}</div><div className="Centered">{i.name}</div><div className="Right">{i.end}</div></a>
+          <a href='' key={i.start} className="People" style={{width: `${i.width}%`, left: `${i.left}%`, "marginTop": `${i.marginTop}%`}}><div className="Left">{i.start}</div><div className="Centered">{i.name}</div><div className="Right">{i.end}</div></a>
         )
       }
     </div>
