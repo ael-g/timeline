@@ -74,17 +74,17 @@ function Timeline() {
     <div className="App">
       {
         state.centuries.map(c => 
-          <a href='' key={c.year} className="Centuries" style={{width: `${c.width}%`, left: `${c.left}%`}}>{c.year}</a>
+          <a key={c.year} className="Centuries" style={{width: `${c.width}%`, left: `${c.left}%`}}>{c.year}</a>
         )
       }
       {
         state.periods.map(i => 
-          <a href='' key={i.start} className="Periods" style={{width: `${i.width}%`, left: `${i.left}%`}}><div className="Left">{i.start}</div><div className="Centered">{i.name}</div><div className="Right">{i.end}</div></a>
+          <a key={i.start} className="Periods" style={{width: `${i.width}%`, left: `${i.left}%`}}><div className="Left">{i.start}</div><div className="Centered">{i.name}</div><div className="Right">{i.end}</div></a>
         )
       }
       {
         state.people.map(i => 
-          <a href='' key={i.start} className="People" style={{width: `${i.width}%`, left: `${i.left}%`, "marginTop": `${i.marginTop}%`}}><div className="Left">{i.start}</div><div className="Centered">{i.name}</div><div className="Right">{i.end}</div></a>
+          <a key={i.start} className="People" style={{width: `${i.width}%`, left: `${i.left}%`, "marginTop": `${i.marginTop}%`}}><div className="Left">{i.start}</div><div className="Centered">{i.name}</div><div className="Right">{i.end}</div></a>
         )
       }
     </div>
