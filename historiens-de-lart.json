@@ -1,0 +1,24 @@
+{
+    "events": [
+
+    ],
+    "periods": [
+    ],
+    "people": [
+        {
+            "start": 1892,
+            "end": 1968,
+            "name": "Erwin Panofsky"
+        },
+        {
+            "start": 1912,
+            "end": 1990,
+            "name": "André Chastel"
+        },
+        {
+            "start": 1944,
+            "end": 2003,
+            "name": "Daniel Arasse"
+        }
+    ]
+}

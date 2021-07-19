@@ -19,21 +19,67 @@
             "end": 1910
         }
     ],
+    "ideas": [
+        "L'histoire n'est pas ne science, est elle qu'un procédé de connaissance",
+        "L'histoire, discipline expérimentale qui doit rechercher les faits, les classer et analyser leurs liens pour être une science",
+        "L'histoire, une compréhension et non une science des phénomènes humains",
+        "La compréhension est propre aux sciences sociales",
+        "L’histoire se définit comme la connaissance du passé humain ; une fois connu comme passé, celui-ci est métamorphosé, rendu intelligible, compris"
+    ],
     "people": [
+        {
+            "start": 1798,
+            "end": 1874,
+            "name": "Jules Michelet"
+        },
+        {
+            "start": 1795,
+            "end": 1856,
+            "name": "Augustin Thierry"
+        },
         {
             "start": 1844,
             "end": 1912,
             "name": "Gabriel Monod"
         },
         {
+            "start": 1830,
+            "end": 1889,
+            "name": "Fustel de Coulanges",
+            "has": [
+                "Scientisme"
+            ]
+        },
+        {
             "start": 1828,
             "end": 1893,
-            "name": "Hippolyte Taine"
+            "name": "Wilhelm Dilthey"
+        },
+        {
+            "start": 1904,
+            "end": 1977,
+            "name": "Henri Irénée Marrou"
+        },
+        {
+            "start": 1828,
+            "end": 1893,
+            "name": "Hippolyte Taine",
+            "has": [
+                "Scientisme"
+            ]
+        },
+        {
+            "start": 1886,
+            "end": 1944,
+            "name": "Marc Bloch"
         },
         {
             "start": 1854,
             "end": 1942,
-            "name": "Charles Seignobos"
+            "name": "Charles Seignobos",
+            "has": [
+                "École méthodique"
+            ]
         },
         {
             "start": 1842,
