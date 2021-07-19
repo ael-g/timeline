@@ -1,5 +1,6 @@
 .Centuries {
   position: absolute;
+  display: flex;
   border-right: #ddd 1px dotted;
   height: 100vh;
   color: rgba(128, 128, 62, 0.6);
@@ -33,7 +34,7 @@
 .People {
   position: absolute;
   display: flex;
-  font-size: 16px;
+  font-size: 14px;
   color: #666;
   border-radius: 48px;
   background-color: rgba(180,180,144,.2);
