@@ -1,8 +1,32 @@
 .App {
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.Main {
   background-color: #fcfcfc;
   display: flex;
   flex-direction: row;
+}
+
+.Footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  height: 2.5rem;
+}
+
+.Header {
+  /* position: absolute;
+  top: 0; */
+  /* width: 100%; */
+  font-size: 24px;
+  background-color: rgba(180,180,144,.2);
+  text-align: left;
+  height: 7rem;
+  padding-left: 1rem;
 }
 
 .App-logo {
