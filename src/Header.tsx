@@ -1,8 +1,13 @@
+import Divider from '@material-ui/core/Divider';
+
 export default function Header() {
 
     return (
-        <div className="Header">
-            Timelines
+        <div>
+            <div className="Header">
+                TimelinesJS
+            </div>
+            <Divider/>
         </div>
     )
 }

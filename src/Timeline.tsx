@@ -49,7 +49,7 @@ function Timeline(params: TimelineParams) {
       const item = items[i]
       const width = 100 * (item.deathDate - item.bornDate) / (max - min)
       const left = 100 * (item.bornDate - min) / (max - min)
-      const marginTop = 4 + ((90 * i)/items.length)
+      const marginTop = 4 + ((80 * i)/items.length)
       people.push({width, left, name: item.name, start: item.bornDate, end: item.deathDate, marginTop})
     }
 
