@@ -27,3 +27,4 @@ export default function AddPeopleModal(params : AddPeopleModalParamsType) {
         </div>
     )
 }
+
