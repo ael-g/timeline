@@ -23,7 +23,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
     }
 
     const onSelectTimeList = (e: TimelineList) => {
-        window.location.assign(`/timelines/${e.id}`);
+        window.location.assign(`${process.env.PUBLIC_URL}/timelines/${e.id}`);
         // setSelectedTimelineList(e);
         // getPeople(e);
     }

@@ -2,8 +2,12 @@
   position: absolute;
   bottom: 0;
   width: 100%;
+  margin: auto;
+}
+
+.Footer-text {
   text-align: center;
   font-size: small;
-  height: 2.5rem;
-  margin: auto;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }

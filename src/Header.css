@@ -1,0 +1,15 @@
+.Header {
+  /* position: absolute;
+  top: 0; */
+  display: flex;
+  color: #666;
+  flex-direction: column;
+  align-content: center;
+  font-size: 30px;
+  font-weight: bold;
+  background-color: rgba(180,180,144,.2);
+  text-align: left;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
