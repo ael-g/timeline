@@ -93,21 +93,7 @@ function Menu(params: MenuParams) {
     }
       
     return (
-    <div style={{display: "flex", flexDirection: "column"}}>
-        <Paper style={{overflow: 'auto', maxHeight: '85vh'}}>
-            {people.map((text) => (
-                <List>
-                <ListItem button id={text.name} onClick={() => onSelectPeople(text.name)} key={text.name}>
-                    <div style={{display: 'flex', flexDirection: 'row', flex: '0 0 100%'}}>
-                        <div style={{flex: '0 0 80%'}}>
-                            <ListItemText primary={text.name} />
-                            <ListItemText style={{color: 'grey'}} primary={`${text.bornDate} - ${text.deathDate}`} />
-                        </div>
-                    </div>
-                </ListItem>
-                </List>
-            ))}
-        </Paper>
+    <div>
     </div>
     )
 }

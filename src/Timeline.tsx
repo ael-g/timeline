@@ -1,5 +1,6 @@
 import './Timeline.css'
 import {People} from './types'
+import PeopleDetails from './PeopleDetails'
 
 type TimelineParams = {
   people: People[]
@@ -62,7 +63,7 @@ function Timeline(params: TimelineParams) {
   const s = {min, max, centuries, periods:[], people: peopleComputed};
 
   return (
-    <div style={{position: 'absolute', width: '80%'}}>
+    <div style={{position: 'absolute', width: '100%'}}>
       {
         s.centuries.map(c => 
           <a key={c.year} className="Centuries" style={{width: `${c.width}%`, left: `${c.left}%`}}>{c.year}</a>
@@ -74,9 +75,7 @@ function Timeline(params: TimelineParams) {
         )
       } */}
       {
-        s.people.map(i => 
-          <a key={i.name} className="People" style={{width: `${i.width}%`, left: `${i.left}%`, "marginTop": `${i.marginTop}vh`}}><div className="Left">{i.start}</div><div className="Centered">{i.name}</div><div className="Right">{i.end}</div></a>
-        )
+        s.people.map(i => <PeopleDetails people={i}/>)
       }
     </div>
   );

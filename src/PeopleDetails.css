@@ -1,0 +1,21 @@
+.PeopleDetails {
+    color: red;
+    z-index: 2;
+}
+
+.People {
+    position: absolute;
+    display: flex;
+    font-size: 14px;
+    color: #666;
+    border-radius: 48px;
+    background-color: rgba(180,180,144,.2);
+    padding: 5px;
+  }
+  
+  .People:hover {
+    color: #666;
+    /* filter: drop-shadow(23 43 0.75rem rgba(180,180,144,.6)); */
+    background-color: rgba(180,180,144,.4);
+  }
+  
