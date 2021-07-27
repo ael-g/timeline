@@ -3,8 +3,14 @@ import {
     Link
   } from "react-router-dom";
 import './Header.css'
+import {TimelineList} from './types'
 
-export default function Header() {
+type HeaderParams = {
+    timelineList?: TimelineList
+}
+
+export default function Header(params : HeaderParams) {
+    const {timelineList} = params
 
     return (
         <div>

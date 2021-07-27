@@ -1,15 +1,35 @@
-import './Timeline.css'
+import {useState} from 'react';
 import {People} from './types'
+import PeopleEditor from './PeopleEditor'
 import PeopleDetails from './PeopleDetails'
+import './Timeline.css'
 
 type TimelineParams = {
   people: People[]
 }
 
+const makeDefaultPeople = () : People => {
+  return {
+    id: '',
+    name: "",
+    bornDate: 0,
+    deathDate: 0,
+    picture: ""
+  }
+}
+
 function Timeline(params: TimelineParams) {
   const { people } = params;
 
-  const unit = 25
+  const [peopleSelected, setPeopleSelected] = useState<People>(makeDefaultPeople())
+  const [isOpenPeopleEditor, setIsOpenPeopleEditor] = useState<boolean>(false)
+
+  const unit = 50
+
+  const setPeopleSelectedLocal = (p: People) => {
+    setPeopleSelected(p)
+    setIsOpenPeopleEditor(true)
+  }
 
   const getTimelineRange = (items :People[]) => {  
     const max = items.reduce((acc, val) => val.deathDate > acc ? val.deathDate:acc, -10000)
@@ -37,7 +57,7 @@ function Timeline(params: TimelineParams) {
     for(const item of items) {
       const width = 100 * (item.end - item.start) / (max - min)
       const left = 100 * (item.start - min) / (max - min)
-      periods.push({width, left, name: item.name, start: item.start, end: item.end})
+      periods.push({width, left, name: item.name, bornDate: item.bornDate, deathDate: item.deathDate})
     }
 
     return periods
@@ -45,13 +65,14 @@ function Timeline(params: TimelineParams) {
 
   const computePeople = (items: any, min: number, max: number) => {
     let people = []
-
     for(let i=0 ; i< items.length ; i++) {
       const item = items[i]
+      
       const width = 100 * (item.deathDate - item.bornDate) / (max - min)
       const left = 100 * (item.bornDate - min) / (max - min)
       const marginTop = 4 + ((80 * i)/items.length)
-      people.push({width, left, name: item.name, start: item.bornDate, end: item.deathDate, marginTop})
+
+      people.push({width, left, id: item.id, name: item.name, bornDate: item.bornDate, deathDate: item.deathDate, picture: item.picture, marginTop})
     }
 
     return people
@@ -75,7 +96,10 @@ function Timeline(params: TimelineParams) {
         )
       } */}
       {
-        s.people.map(i => <PeopleDetails people={i}/>)
+        <PeopleEditor open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)} people={peopleSelected}/>
+      }
+      {
+        s.people.map(i => <PeopleDetails people={i} setPeopleSelected={setPeopleSelectedLocal}/>)
       }
     </div>
   );

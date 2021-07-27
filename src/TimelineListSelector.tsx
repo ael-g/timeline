@@ -1,7 +1,8 @@
-import { Paper, List, ListItem, ListItemText, Typography } from "@material-ui/core";
+import { List, ListItem, ListItemText, Paper, Typography } from "@material-ui/core";
 import {useEffect, useState} from 'react'
 import db from './config/firebase';
 import {TimelineList} from './types';
+import './TimelineListSelector.css';
 
 type TimelineListSelectorParams = {
     timelineLists: TimelineList[];
@@ -29,21 +30,16 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
     }
 
     return (
-        <div style={{
-            display: "flex",
-            marginTop: "30vh",
-            alignItems: "center",
-            justifyContent: "center",
-        }}>
-        <Paper elevation={2}>
-            <List>
-            {timelineLists.map((text) => (
-                <ListItem button id={text.name} onClick={() => onSelectTimeList(text)} key={text.name}>
-                    <ListItemText primary={<Typography style={{fontSize: "x-large"}}>{text.name}</Typography>}/>
-                </ListItem>
-            ))}
-            </List>
-        </Paper>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div className="TimelineListSelector">
+                <List>
+                {timelineLists.map((text) => (
+                    <ListItem button id={text.name} onClick={() => onSelectTimeList(text)} key={text.name}>
+                        <ListItemText primary={<Typography style={{fontSize: "x-large"}}>{text.name}</Typography>}/>
+                    </ListItem>
+                ))}
+                </List>
+            </div>
         </div>
     )
 }

@@ -1,7 +1,4 @@
 .Header {
-  /* position: absolute;
-  top: 0; */
-  display: flex;
   color: #666;
   flex-direction: column;
   align-content: center;
