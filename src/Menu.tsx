@@ -1,26 +1,16 @@
 import {useEffect, useState} from 'react'
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import DeleteIcon from '@material-ui/icons/Delete';
 import db from './config/firebase';
-// import admin from 'firebase-admin';
-// import {quattrocento} from './quattrocento'
-import {People, TimelineList} from './types';
-import {
-  useParams,
-} from "react-router-dom";
+
+import {People, TimelineList, Category} from './types';
+import {useParams} from "react-router-dom";
 
 function createDefaultPeople() :People {
     return {id: "", name: "", picture: "", bornDate: 1800, deathDate: 1900}
 }
 
 type MenuParams = {
-    people: People[];
     setPeople: Function;
+    setCategories: Function;
 }
 
 type TimelineParams = {
@@ -31,9 +21,7 @@ function Menu(params: MenuParams) {
     const { timelineId } = useParams<TimelineParams>();
      
     const[selectedPeople, setSelectedPeople] = useState<People>(createDefaultPeople());
-    let selectedPeopleModified = {...selectedPeople}
-    // const[people, setPeople] = useState<Array<People>>([]);
-    const { people, setPeople } = params;
+    const { setPeople, setCategories } = params;
 
     const[timelineList, setTimelineList] = useState<Array<TimelineList>>([]);
     const[selectedTimelineList, setSelectedTimelineList] = useState<TimelineList>({id: '', name: ''});
@@ -60,6 +48,12 @@ function Menu(params: MenuParams) {
         setPeople(people);
     }
 
+    const getCategories = async () => {        
+        const col = await db.collection('categories').get();
+        const categories = col.docs.map(p => {return {id: p.id, ...p.data()} as Category})
+        setCategories(categories);
+    }
+
     const onSelectPeople = (e: string) => {
         console.log(e)
     }
@@ -67,6 +61,7 @@ function Menu(params: MenuParams) {
     const onSelectTimeList = (e: TimelineList) => {
         setSelectedTimelineList(e);
         getPeople(e);
+        getCategories();
     }
 
     const onAssociatePeople = async () => {

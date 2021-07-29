@@ -1,11 +1,12 @@
 import {useState} from 'react';
-import {People} from './types'
+import {People, Category} from './types'
 import PeopleEditor from './PeopleEditor'
 import PeopleDetails from './PeopleDetails'
 import './Timeline.css'
 
 type TimelineParams = {
-  people: People[]
+  people: People[];
+  categories: Category[];
 }
 
 const makeDefaultPeople = () : People => {
@@ -19,12 +20,12 @@ const makeDefaultPeople = () : People => {
 }
 
 function Timeline(params: TimelineParams) {
-  const { people } = params;
+  const { people, categories } = params;
 
   const [peopleSelected, setPeopleSelected] = useState<People>(makeDefaultPeople())
   const [isOpenPeopleEditor, setIsOpenPeopleEditor] = useState<boolean>(false)
 
-  const unit = 50
+  const unit = 25
 
   const setPeopleSelectedLocal = (p: People) => {
     setPeopleSelected(p)
@@ -96,7 +97,7 @@ function Timeline(params: TimelineParams) {
         )
       } */}
       {
-        <PeopleEditor open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)} people={peopleSelected}/>
+        <PeopleEditor open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)} people={peopleSelected} categories={categories}/>
       }
       {
         s.people.map(i => <PeopleDetails people={i} setPeopleSelected={setPeopleSelectedLocal}/>)

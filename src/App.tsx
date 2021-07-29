@@ -10,12 +10,13 @@ import Menu from './Menu';
 import Footer from './Footer';
 import Header from './Header';
 import TimelineListSelector from './TimelineListSelector'
-import {People, TimelineList} from './types';
+import {People, TimelineList, Category} from './types';
 
 
 function App() {
 
   const[people, setPeople] = useState<Array<People>>([]);
+  const[categories, setCategories] = useState<Array<Category>>([]);
   const[timelineLists, setTimelineList] = useState<Array<TimelineList>>([]);
 
   return (
@@ -26,10 +27,10 @@ function App() {
         <Route path="/timelines/:timelineId">
           <div className="Main">
             <div>
-              <Menu setPeople={setPeople} people={people}/>
+              <Menu setPeople={setPeople} setCategories={setCategories}/>
             </div>
             <div>
-              <Timeline people={people}/>
+              <Timeline people={people} categories={categories}/>
             </div>
           </div>
         </Route>

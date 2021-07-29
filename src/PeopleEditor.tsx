@@ -1,33 +1,38 @@
-import {useState, useEffect, useRef} from 'react';
-import {Modal, TextField, List} from '@material-ui/core';
-import {People} from './types'
+import {useRef} from 'react';
+import db from './config/firebase';
+import {Modal, TextField, List, Button, Typography, ListItem, ListItemIcon, ListItemText, Checkbox} from '@material-ui/core';
+import {People, Category} from './types'
 import './PeopleEditor.css';
 
 type PeopleEditorParamsType = {
     open: boolean;
     people: People;
     onClose: any;
+    categories: Category[];
 }
 
 export default function PeopleEditor(params : PeopleEditorParamsType) {
-    const {people, open, onClose} = params;
+    const {people, open, onClose, categories} = params;
+    const idRef = useRef<HTMLDivElement>(null);
     const nameRef = useRef<HTMLDivElement>(null);
+    const bornDateRef = useRef<HTMLDivElement>(null);
+    const deathDateRef = useRef<HTMLDivElement>(null);
+    const pictureRef = useRef<HTMLDivElement>(null);
 
-    let [selectedPeople, setSelectedPeople] = useState<People>(people)
-    // console.log(selectedPeople)
-
-    const updateKey = <K extends keyof People>(people: People, key: K, value: People[K]) => {
-        const p = {...people}
-        p[key] = value;
-        return p
-    }
-
-    const onPeopleModify = (e: any) => {
-        if(nameRef.current) {
-            console.log(nameRef.current.children[1].children[0])
+    const onValidate = async () => {
+        if (idRef.current && nameRef.current && bornDateRef.current && deathDateRef.current && pictureRef.current) {
+            const id = (idRef.current.children[1].children[0] as HTMLInputElement).value as string
+            const name = (nameRef.current.children[1].children[0] as HTMLInputElement).value as string
+            const bornDate = parseInt((bornDateRef.current.children[1].children[0] as HTMLInputElement).value) as number
+            const deathDate = parseInt((deathDateRef.current.children[1].children[0] as HTMLInputElement).value) as number
+            const picture = (pictureRef.current.children[1].children[0] as HTMLInputElement).value as string
+            const people = {
+                name, bornDate, deathDate, picture
+            }
+            // console.log(people)
+            const res = await db.collection('people').doc(id).update(people)
+            onClose()
         }
-        const people = updateKey(selectedPeople, e.target.id, e.target.value)
-        setSelectedPeople(people)
     }
 
     return (
@@ -37,13 +42,23 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
         >{
             <div className="Editor">
                 <div style={{display: "flex", flexDirection: "column"}}>
-                    <TextField ref={nameRef} id="name" label="Name" type="string" onChange={onPeopleModify} defaultValue={people.name}/>
-                    <TextField id="bornDate" label="Born in" type="number" onChange={onPeopleModify} defaultValue={people.bornDate}/>
-                    <TextField id="deathDate" label="Died in" type="number" onChange={onPeopleModify} defaultValue={people.deathDate}/>
-                    <TextField id="picture" label="Picture" type="url" onChange={onPeopleModify} defaultValue={people.picture}/>
+                    <TextField ref={idRef} id="id" label="id" type="string" defaultValue={people.id} style={{display: "none"}}/>
+                    <TextField ref={nameRef} id="name" label="Name" type="string" defaultValue={people.name}/>
+                    <TextField ref={bornDateRef} id="bornDate" label="Born in" type="number" defaultValue={people.bornDate}/>
+                    <TextField ref={deathDateRef} id="deathDate" label="Died in" type="number" defaultValue={people.deathDate}/>
+                    <TextField ref={pictureRef} id="picture" label="Picture" type="url" defaultValue={people.picture}/>
+                    <Typography>Catégories</Typography>
                     <List>
-
+                    {
+                    categories.map(c => 
+                        <ListItem button>
+                            <ListItemIcon> <Checkbox edge="start" checked={true}/></ListItemIcon>
+                            <ListItemText primary={c.name} />
+                        </ListItem>
+                    )
+                    }
                     </List>
+                    <Button onClick={onValidate}>Validate</Button>
                 </div>
             </div>
         }

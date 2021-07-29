@@ -11,6 +11,11 @@ type TimelineList = {
     name: string;
 };
 
+type Category = {
+    id: string;
+    name: string;
+}
+
 type GenericTimelineObject = {
     start: number;
     end: number;
@@ -21,4 +26,4 @@ type GenericTimelineObject = {
     left?: number;
 }
 
-export type {People, GenericTimelineObject, TimelineList};
+export type {People, GenericTimelineObject, TimelineList, Category};
