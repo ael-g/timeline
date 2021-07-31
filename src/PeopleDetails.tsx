@@ -41,9 +41,9 @@ export default function PeopleDetails(params : PeopleDetailsParamsType) {
             }
             <a  key={people.name}
                 onClick={() => setPeopleSelected(people)}
-                onMouseEnter={() => setDisplayDetails(true)} 
-                onMouseLeave={() => setDisplayDetails(false)} 
-                className="People" style={{width: `${people.width}%`, left: `${people.left}%`, "marginTop": `${people.marginTop}vh`}}>
+                // onMouseEnter={() => setDisplayDetails(true)} 
+                // onMouseLeave={() => setDisplayDetails(false)} 
+                className="People" style={{width: `${people.width}%`, left: `${people.left}%`, "marginTop": `${people.marginTop}px`}}>
                 <div className="Left">{people.bornDate}</div>
                 <div className="Centered">{people.name}</div>
                 <div className="Right">{people.deathDate}</div>

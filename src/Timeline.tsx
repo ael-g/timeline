@@ -71,7 +71,7 @@ function Timeline(params: TimelineParams) {
       
       const width = 100 * (item.deathDate - item.bornDate) / (max - min)
       const left = 100 * (item.bornDate - min) / (max - min)
-      const marginTop = 4 + ((80 * i)/items.length)
+      const marginTop = 30 + ((40 * i))
 
       people.push({width, left, id: item.id, name: item.name, bornDate: item.bornDate, deathDate: item.deathDate, picture: item.picture, marginTop})
     }
@@ -79,16 +79,22 @@ function Timeline(params: TimelineParams) {
     return people
   }
 
+  const computeHeight = (people: any[]) => {
+    return people.reduce((acc, val) => val.marginTop > acc ? val.marginTop:acc, -10000)
+  }
+
   const {min, max} = getTimelineRange(people);
   const centuries = computeCenturies(min, max);
   const peopleComputed = computePeople(people, min, max);
+  const height = computeHeight(peopleComputed);
+  console.log(height)
   const s = {min, max, centuries, periods:[], people: peopleComputed};
 
   return (
-    <div style={{position: 'absolute', width: '100%'}}>
+    <div className="Timeline">
       {
         s.centuries.map(c => 
-          <a key={c.year} className="Centuries" style={{width: `${c.width}%`, left: `${c.left}%`}}>{c.year}</a>
+          <a key={c.year} className="Centuries" style={{width: `${c.width}%`, left: `${c.left}%`, height: `${height}px`}}>{c.year}</a>
         )
       }
       {/* {

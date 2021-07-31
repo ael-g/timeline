@@ -1,8 +1,13 @@
+.Timeline {
+  position: 'absolute';
+  width: '100%';
+  margin-top: 65px;
+}
+
 .Centuries {
-  position: absolute;
+  position: fixed;
   display: flex;
   border-right: #ddd 1px dotted;
-  height:85vh;
   margin-bottom: 50px;
   color: rgba(128, 128, 62, 0.6);
   font-size: 20px;

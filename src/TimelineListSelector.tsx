@@ -1,5 +1,6 @@
-import { List, ListItem, ListItemText, Paper, Typography } from "@material-ui/core";
+import { List, ListItem, ListItemText, Divider, Typography } from "@material-ui/core";
 import {useEffect, useState} from 'react'
+import {Search} from '@material-ui/icons';
 import db from './config/firebase';
 import {TimelineList} from './types';
 import './TimelineListSelector.css';
@@ -11,7 +12,7 @@ type TimelineListSelectorParams = {
 
 export default function TimelineListSelector(params: TimelineListSelectorParams) {
     const {timelineLists, setTimelineList} = params;
-    const[selectedTimelineList, setSelectedTimelineList] = useState<TimelineList>({id: '', name: ''});
+    const [displayedTimelineLists, setDisplayedTimelineLists] = useState<Array<TimelineList>>(timelineLists)
 
     useEffect(() => {
         getTimelineLists();
@@ -21,19 +22,29 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
         const col = await db.collection('timelineLists').orderBy('name').get();
         const timelineLists = col.docs.map(p => {return {id: p.id, ...p.data()} as TimelineList})
         setTimelineList(timelineLists);
+        setDisplayedTimelineLists(timelineLists);
     }
 
     const onSelectTimeList = (e: TimelineList) => {
         window.location.assign(`${process.env.PUBLIC_URL}/timelines/${e.id}`);
-        // setSelectedTimelineList(e);
-        // getPeople(e);
+    }
+
+    const onSearch = (e: any) => {
+        const t = timelineLists.filter(t => 
+            t.name.toLowerCase().match(e.target.value)
+        )
+        setDisplayedTimelineLists(t)
     }
 
     return (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div className="TimelineListSelector">
                 <List>
-                {timelineLists.map((text) => (
+                    <div className="SearchBar">
+                    <Search/><input type="text" onChange={onSearch} autoFocus></input>
+                    </div>
+                    <Divider/>
+                {displayedTimelineLists.map((text) => (
                     <ListItem button id={text.name} onClick={() => onSelectTimeList(text)} key={text.name}>
                         <ListItemText primary={<Typography style={{fontSize: "x-large"}}>{text.name}</Typography>}/>
                     </ListItem>
