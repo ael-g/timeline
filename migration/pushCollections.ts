@@ -4,7 +4,8 @@ import * as fs from 'fs';
 const collections = [
     'people',
     'timelineLists',
-    'categories'
+    'categories',
+    'events'
 ]
 
 collections.forEach(async c => {

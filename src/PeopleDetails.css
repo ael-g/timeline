@@ -54,3 +54,17 @@
   flex: 1;
   text-align: right;
 }
+
+.EditPeople {
+  /* flex: 1 1; */
+  display: block;
+  position: absolute;
+  width: 100px;
+  color: rgb(186, 186, 186);
+}
+
+.EditPeople svg:hover {
+  border-radius: 10px;
+  color: rgb(50, 50, 50);
+  background-color: rgba(75, 75, 61, 0.147);
+}

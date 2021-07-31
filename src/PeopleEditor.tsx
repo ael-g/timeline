@@ -1,6 +1,6 @@
 import {useRef} from 'react';
 import db from './config/firebase';
-import {Modal, TextField, List, Button, Typography, ListItem, ListItemIcon, ListItemText, Checkbox} from '@material-ui/core';
+import {Modal, TextField, List, Button, Typography, ListItem, ListItemIcon, ListItemText, Checkbox, Divider} from '@material-ui/core';
 import {People, Category} from './types'
 import './PeopleEditor.css';
 
@@ -47,17 +47,19 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
                     <TextField ref={bornDateRef} id="bornDate" label="Born in" type="number" defaultValue={people.bornDate}/>
                     <TextField ref={deathDateRef} id="deathDate" label="Died in" type="number" defaultValue={people.deathDate}/>
                     <TextField ref={pictureRef} id="picture" label="Picture" type="url" defaultValue={people.picture}/>
-                    <Typography>Catégories</Typography>
-                    <List>
+                    <Typography>Categories</Typography>
+                    <Divider/>
+                    <List style={{maxHeight: 100, overflow: 'auto'}}>
                     {
                     categories.map(c => 
-                        <ListItem button>
-                            <ListItemIcon> <Checkbox edge="start" checked={true}/></ListItemIcon>
+                        <ListItem style={{height: "25px"}} button>
+                            <ListItemIcon> <Checkbox edge="start" checked={false}/></ListItemIcon>
                             <ListItemText primary={c.name} />
                         </ListItem>
                     )
                     }
                     </List>
+                    <Divider/>
                     <Button onClick={onValidate}>Validate</Button>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import EditIcon from '@material-ui/icons/Edit';
 import './PeopleDetails.css';
 
 type PeopleDetailsParamsType = {
@@ -22,6 +23,8 @@ export default function PeopleDetails(params : PeopleDetailsParamsType) {
     const {people, setPeopleSelected} = params;
 
     const [displayDetails, setDisplayDetails] = useState<Boolean>(false)
+    // const [displayEdit, setDisplayEdit] = useState<Boolean>(false)
+
 
     const Details = (params: any) => {
         const {open} = params
@@ -35,19 +38,28 @@ export default function PeopleDetails(params : PeopleDetailsParamsType) {
     }
 
     return (
-        <div>
+        <div
+            onMouseEnter={() => setDisplayDetails(true)} 
+            onMouseLeave={() => setDisplayDetails(false)}
+        >
             {
-                <Details open={displayDetails}/>
+                // <Details open={displayDetails}/>
             }
             <a  key={people.name}
                 onClick={() => setPeopleSelected(people)}
-                // onMouseEnter={() => setDisplayDetails(true)} 
-                // onMouseLeave={() => setDisplayDetails(false)} 
                 className="People" style={{width: `${people.width}%`, left: `${people.left}%`, "marginTop": `${people.marginTop}px`}}>
                 <div className="Left">{people.bornDate}</div>
                 <div className="Centered">{people.name}</div>
                 <div className="Right">{people.deathDate}</div>
             </a>
+                {   displayDetails ? 
+                        <div 
+                        className="EditPeople"
+                        style={{ left: `${people.left + people.width + 1 }%`, "marginTop": `${people.marginTop}px`}}>
+                            <EditIcon/>
+                        </div>
+                    :<div></div>
+                }
         </div>
     )
 }
