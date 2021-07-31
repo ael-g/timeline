@@ -26,6 +26,7 @@
   "scripts": {
     "start": "react-scripts start",
     "getData": "ts-node -P tsconfig-tsnode.json migration/getCollections.ts",
+    "pushData": "ts-node -P tsconfig-tsnode.json migration/pushCollections.ts",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
