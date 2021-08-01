@@ -5,8 +5,8 @@
     outline: none;
     top: 15%;
     bottom: 15%;
-    right: 15%;
-    left: 15%;
+    right: 25%;
+    left: 25%;
     /* transform: translate(-50%, -50%); */
     border-radius: 8px;
     box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);      

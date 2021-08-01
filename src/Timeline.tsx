@@ -23,12 +23,14 @@ const makeDefaultPeople = () : People => {
   }
 }
 
+const units = [ 10, 25, 50, 100 ]
+
 function Timeline(params: TimelineParams) {
   const { people, categories, events } = params;
 
   const [peopleSelected, setPeopleSelected] = useState<People>(makeDefaultPeople())
   const [isOpenPeopleEditor, setIsOpenPeopleEditor] = useState<boolean>(false)
-  const [unit, setUnit] = useState<number>(25)
+  const [unit, setUnit] = useState<number>(10)
 
   const setPeopleSelectedLocal = (p: People) => {
     setPeopleSelected(p)
@@ -55,6 +57,24 @@ function Timeline(params: TimelineParams) {
     return centuries
   }
 
+  const findMarginTop = (items: any, item: any, i: number) => {
+    let marginTop : number = 30
+    
+    for (let ii = 0 ; ii<=i ; ii++) {
+      marginTop = 30 + ((45 * ii))
+
+      const predecessor = items.filter((p:any) => (
+        p.marginTop == marginTop && p.deathDate > (item.bornDate - 10)
+      ))
+
+      if (! predecessor.length) {
+        break
+      }
+    }
+    
+    return marginTop
+  }
+
   const computePeople = (items: any, min: number, max: number) => {
     let people = []
     for(let i=0 ; i< items.length ; i++) {
@@ -62,7 +82,7 @@ function Timeline(params: TimelineParams) {
       
       const width = 100 * (item.deathDate - item.bornDate) / (max - min)
       const left = 100 * (item.bornDate - min) / (max - min)
-      const marginTop = 30 + ((45 * i))
+      const marginTop = findMarginTop(people, item, i)
 
       people.push({width, left, id: item.id, name: item.name, bornDate: item.bornDate, deathDate: item.deathDate, picture: item.picture, marginTop})
     }
@@ -96,19 +116,19 @@ function Timeline(params: TimelineParams) {
   const s = {min, max, centuries, periods:[], people: peopleComputed, events: eventsComputed};
 
   const onChangeUnit = (val:number) => {
-    let newUnit = unit + val;
-    newUnit = newUnit < 25 ? 25: newUnit;
-    newUnit = newUnit > 100 ? 100: newUnit;
-    setUnit(newUnit)
+    const i = units.indexOf(unit) + val
+    if (i < units.length && i >= 0) {
+      setUnit(units[i])
+    }
   }
 
   return (
     <div className="Timeline">
       {
         <div className="Zoom">
-          <AddIcon className="ZoomAction" onClick={() => onChangeUnit(25)}/>
+          <AddIcon className="ZoomAction" onClick={() => onChangeUnit(-1)}/>
           <Divider/>
-          <RemoveIcon className="ZoomAction" onClick={() => onChangeUnit(-25)}/>
+          <RemoveIcon className="ZoomAction" onClick={() => onChangeUnit(1)}/>
         </div>
       }
       {
