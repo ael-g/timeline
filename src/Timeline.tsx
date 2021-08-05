@@ -85,7 +85,7 @@ function Timeline(params: TimelineParams) {
       const left = 100 * (item.bornDate - min) / (max - min)
       const marginTop = findMarginTop(people, item, i)
 
-      people.push({width, left, id: item.id, name: item.name, bornDate: item.bornDate, deathDate: item.deathDate, picture: item.picture, marginTop})
+      people.push({width, left, id: item.id, name: item.name, bornDate: item.bornDate, deathDate: item.deathDate, picture: item.picture, description: item.description, marginTop})
     }
 
     return people

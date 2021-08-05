@@ -16,6 +16,7 @@ type PeopleDisplayType = {
     bornDate: number;
     deathDate: number;
     picture: string;
+    description?: string;
 }
 
 
@@ -36,7 +37,10 @@ export default function PeopleDetails(params : PeopleDetailsParamsType) {
                 onClick={() => setPeopleSelected(people)}
                 className="People" style={{width: `${people.width}%`, left: `${people.left}%`, "marginTop": `${people.marginTop}px`}}>
                 <div className="Left">{people.bornDate}</div>
-                <div className="Centered">{people.name}</div>
+                <div className="Centered">
+                    <div style={{fontWeight: "bold"}}>{people.name}</div>
+                    <div>{people.description}</div>
+                </div>
                 <div className="Right">{people.deathDate}</div>
             </a>
                 {   displayDetails ? 

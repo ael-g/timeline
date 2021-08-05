@@ -41,9 +41,10 @@
 }
 
 .Centered {
+  display: flex;
+  flex-direction: column;
   flex: 2;
   text-align: center;
-  font-weight: bold;
 }
 
 .Left {
