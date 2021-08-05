@@ -14,11 +14,11 @@ import {People, TimelineList, Category, Event} from './types';
 
 
 function App() {
-
   const[people, setPeople] = useState<Array<People>>([]);
   const[events, setEvents] = useState<Array<Event>>([]);
   const[categories, setCategories] = useState<Array<Category>>([]);
-  const[timelineLists, setTimelineList] = useState<Array<TimelineList>>([]);
+  const[timelineLists, setTimelineLists] = useState<Array<TimelineList>>([]);
+  const[timelineList, setTimelineList] = useState<TimelineList>({id: '', name: ''});
 
   return (
   <Router basename={process.env.PUBLIC_URL}>
@@ -31,12 +31,12 @@ function App() {
               <Menu setPeople={setPeople} setCategories={setCategories} setEvents={setEvents}/>
             </div>
             <div>
-              <Timeline people={people} categories={categories} events={events}/>
+              <Timeline people={people} categories={categories} timelineList={timelineList} events={events}/>
             </div>
           </div>
         </Route>
         <Route path="/">
-          <TimelineListSelector setTimelineList={setTimelineList} timelineLists={timelineLists}/>
+          <TimelineListSelector setTimelineLists={setTimelineLists} timelineLists={timelineLists}/>
         </Route>
       </Switch>
       </div>

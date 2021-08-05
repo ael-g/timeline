@@ -2,10 +2,11 @@
   color: #666;
   height: 35px;
   position: fixed;
+  display: flex;
+  flex-direction: row;
   z-index: 2;
   top: 0;
   width: 100%;
-  flex-direction: column;
   align-content: center;
   font-size: 30px;
   font-weight: bold;

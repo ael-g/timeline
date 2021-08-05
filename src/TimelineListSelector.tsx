@@ -7,11 +7,11 @@ import './TimelineListSelector.css';
 
 type TimelineListSelectorParams = {
     timelineLists: TimelineList[];
-    setTimelineList: Function;
+    setTimelineLists: Function;
 }
 
 export default function TimelineListSelector(params: TimelineListSelectorParams) {
-    const {timelineLists, setTimelineList} = params;
+    const {timelineLists, setTimelineLists} = params;
     const [userSearch, setUserSearch] = useState<string>()
     const [displayedTimelineLists, setDisplayedTimelineLists] = useState<Array<TimelineList>>(timelineLists)
 
@@ -22,7 +22,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
     const getTimelineLists = async () => {
         const col = await db.collection('timelineLists').orderBy('name').get();
         const timelineLists = col.docs.map(p => {return {id: p.id, ...p.data()} as TimelineList})
-        setTimelineList(timelineLists);
+        setTimelineLists(timelineLists);
         setDisplayedTimelineLists(timelineLists);
     }
 

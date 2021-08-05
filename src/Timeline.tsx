@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {Add as AddIcon, Remove as RemoveIcon} from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
-import {People, Category, Event} from './types'
+import {People, Category, Event, TimelineList} from './types'
 import PeopleEditor from './PeopleEditor'
 import PeopleDetails from './PeopleDetails'
 import './Timeline.css'
@@ -10,6 +10,7 @@ type TimelineParams = {
   people: People[];
   categories: Category[];
   events: Event[];
+  timelineList: TimelineList;
 }
 
 const makeDefaultPeople = () : People => {
@@ -25,9 +26,7 @@ const makeDefaultPeople = () : People => {
 const units = [ 10, 25, 50, 100 ]
 
 function Timeline(params: TimelineParams) {
-  const { people, categories, events } = params;
-  const timelineIdMatch = window.location.pathname.match(/timelines\/(.+)$/)
-  const timelineId = timelineIdMatch ? timelineIdMatch[1]:''
+  const { people, categories, events, timelineList } = params;
 
   const [peopleSelected, setPeopleSelected] = useState<People>(makeDefaultPeople())
   const [isOpenPeopleEditor, setIsOpenPeopleEditor] = useState<boolean>(false)
@@ -143,7 +142,7 @@ function Timeline(params: TimelineParams) {
         )
       }
       {
-        <PeopleEditor open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)} timelineId={timelineId}/>
+        <PeopleEditor open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)} timelineList={timelineList}/>
       }
       {
         <div style={{display: 'flex', flexDirection: 'column'}}>

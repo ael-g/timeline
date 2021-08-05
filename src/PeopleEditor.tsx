@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {Modal, List, Typography, ListItem, ListItemText, Divider} from '@material-ui/core';
-import {People} from './types'
+import {People, TimelineList} from './types'
 import db from './config/firebase';
 
 import {Search} from '@material-ui/icons';
@@ -10,7 +10,7 @@ import {getPeople} from './Wikidata';
 
 type PeopleEditorParamsType = {
     open: boolean;
-    timelineId: string;
+    timelineList: TimelineList;
     onClose: any;
 }
 
@@ -27,10 +27,9 @@ const getYear = (date:string) => {
 }
 
 export default function PeopleEditor(params : PeopleEditorParamsType) {
-    const {open, onClose, timelineId} = params;
+    const {open, onClose, timelineList} = params;
     const [people, setPeople] = useState<Array<People>>([])
 
-    console.log(timelineId)
 
     const onCloseInternal = () => {
         setPeople([])
@@ -56,7 +55,7 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
     }
 
     const onAddPeople = async (p: People) => {
-        const people = {...p, timelineLists: [timelineId]}
+        const people = {...p, timelineLists: [timelineList.id]}
         await db.collection('people').add(people);
         onCloseInternal()
         window.location.reload()
