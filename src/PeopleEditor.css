@@ -1,18 +1,34 @@
-.Editor {
-    position: absolute;
+.PeopleEditor {
+    font-size: 14px;
+    border-radius: 8px;
     background-color: white;
     padding: 5px;
-    outline: none;
-    top: 15%;
-    bottom: 15%;
-    right: 25%;
-    left: 25%;
-    /* transform: translate(-50%, -50%); */
-    border-radius: 8px;
-    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);      
-    border: '2px solid #000';
+    margin-top: 10vh;
+    margin-right: 30px;
+    margin-left: 30px;
+    width: 80%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  }
+
+.SearchBar {
+  margin: 10px;
+  font-size: 30px;
+  height: 40px;
 }
 
-.Editor input {
-    font-size: 25px;
+img {
+  max-width: 60px;
+}
+
+input {
+  font-size: 30px;
+  padding-left: 10px;
+  color: grey;
+  border: none;
+  border-color: transparent;
+}
+
+input:focus {
+  outline: none;
 }

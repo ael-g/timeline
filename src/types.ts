@@ -4,6 +4,7 @@ type People = {
     picture: string;
     bornDate: number;
     deathDate: number;
+    description?: string;
 };
 
 type TimelineList = {

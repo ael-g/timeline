@@ -10,7 +10,6 @@ type HeaderParams = {
 }
 
 export default function Header(params : HeaderParams) {
-    const {timelineList} = params
 
     return (
         <div>

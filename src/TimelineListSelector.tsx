@@ -29,7 +29,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
         window.location.assign(`${process.env.PUBLIC_URL}/timelines/${e.id}`);
     }
 
-    const onSearch = (e: any) => {
+    const onSearch = async (e: any) => {
         const t = timelineLists.filter(t => 
             t.name.toLowerCase().match(e.target.value)
         )

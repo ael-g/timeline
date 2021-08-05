@@ -4,7 +4,6 @@ import Divider from '@material-ui/core/Divider';
 import {People, Category, Event} from './types'
 import PeopleEditor from './PeopleEditor'
 import PeopleDetails from './PeopleDetails'
-import EventDetails from './EventDetails'
 import './Timeline.css'
 
 type TimelineParams = {
@@ -64,7 +63,7 @@ function Timeline(params: TimelineParams) {
       marginTop = 30 + ((45 * ii))
 
       const predecessor = items.filter((p:any) => (
-        p.marginTop == marginTop && p.deathDate > (item.bornDate - 10)
+        p.marginTop === marginTop && p.deathDate > (item.bornDate - 10)
       ))
 
       if (! predecessor.length) {
@@ -144,9 +143,6 @@ function Timeline(params: TimelineParams) {
       {
         <PeopleEditor open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)} people={peopleSelected} categories={categories}/>
       }
-      {/* {
-        s.events.map(i => <EventDetails event={i}/>)
-      } */}
       {
         s.people.map(i => <PeopleDetails people={i} setPeopleSelected={setPeopleSelectedLocal}/>)
       }

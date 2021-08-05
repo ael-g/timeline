@@ -1,8 +1,10 @@
-import {useRef} from 'react';
-import db from './config/firebase';
-import {Modal, TextField, List, Button, Typography, ListItem, ListItemIcon, ListItemText, Checkbox, Divider} from '@material-ui/core';
+import {useState} from 'react';
+import {Modal, List, Typography, ListItem, ListItemText, Divider} from '@material-ui/core';
 import {People, Category} from './types'
+import {Search} from '@material-ui/icons';
+
 import './PeopleEditor.css';
+import {getPeople} from './Wikidata';
 
 type PeopleEditorParamsType = {
     open: boolean;
@@ -11,58 +13,82 @@ type PeopleEditorParamsType = {
     categories: Category[];
 }
 
-export default function PeopleEditor(params : PeopleEditorParamsType) {
-    const {people, open, onClose, categories} = params;
-    const idRef = useRef<HTMLDivElement>(null);
-    const nameRef = useRef<HTMLDivElement>(null);
-    const bornDateRef = useRef<HTMLDivElement>(null);
-    const deathDateRef = useRef<HTMLDivElement>(null);
-    const pictureRef = useRef<HTMLDivElement>(null);
+const getYear = (date:string) => {
+    const bce = date.match(/^-/);
 
-    const onValidate = async () => {
-        if (idRef.current && nameRef.current && bornDateRef.current && deathDateRef.current && pictureRef.current) {
-            const id = (idRef.current.children[1].children[0] as HTMLInputElement).value as string
-            const name = (nameRef.current.children[1].children[0] as HTMLInputElement).value as string
-            const bornDate = parseInt((bornDateRef.current.children[1].children[0] as HTMLInputElement).value) as number
-            const deathDate = parseInt((deathDateRef.current.children[1].children[0] as HTMLInputElement).value) as number
-            const picture = (pictureRef.current.children[1].children[0] as HTMLInputElement).value as string
-            const people = {
-                name, bornDate, deathDate, picture
-            }
-            // console.log(people)
-            const res = await db.collection('people').doc(id).update(people)
-            onClose()
-        }
+    let sanitizedDate = date
+    if(bce) {
+        sanitizedDate = sanitizedDate.substring(1);
+    }
+
+    const year = (new Date(sanitizedDate)).getFullYear()
+    return bce ? year * -1 : year;
+}
+
+export default function PeopleEditor(params : PeopleEditorParamsType) {
+    const {open, onClose} = params;
+    const [people, setPeople] = useState<Array<People>>([])
+
+    const onCloseInternal = () => {
+        setPeople([])
+        onClose()
+    }
+
+    const onSearch = async (e: any) => {
+        const p = await getPeople(e.target.value)
+        const t = p.map( (i:any) => {
+            const birth = i.birth ? getYear(i.birth.value):'';
+            const death = i.death ? getYear(i.death.value):'';
+            const picture = i.picture ? i.picture.value:'';
+            const description = i.desc ? i.desc.value.charAt(0).toUpperCase() + i.desc.value.slice(1):''
+
+            return {
+                name: i.label.value,
+                bornDate: birth,
+                deathDate: death,
+                picture,
+                description
+            }})
+        setPeople(t)
     }
 
     return (
         <Modal
             open={open}
-            onClose={onClose}
+            onClose={onCloseInternal}
         >{
-            <div className="Editor">
-                <div style={{display: "flex", flexDirection: "column"}}>
-                    <TextField ref={idRef} id="id" label="id" type="string" defaultValue={people.id} style={{display: "none"}}/>
-                    <TextField ref={nameRef} id="name" label="Name" type="string" defaultValue={people.name}/>
-                    <TextField ref={bornDateRef} id="bornDate" label="Born in" type="number" defaultValue={people.bornDate}/>
-                    <TextField ref={deathDateRef} id="deathDate" label="Died in" type="number" defaultValue={people.deathDate}/>
-                    <TextField ref={pictureRef} id="picture" label="Picture" type="url" defaultValue={people.picture}/>
-                    <Typography>Categories</Typography>
-                    <Divider/>
-                    <List style={{maxHeight: 100, overflow: 'auto'}}>
-                    {
-                    categories.map(c => 
-                        <ListItem style={{height: "25px"}} button>
-                            <ListItemIcon> <Checkbox edge="start" checked={false}/></ListItemIcon>
-                            <ListItemText primary={c.name} />
-                        </ListItem>
-                    )
-                    }
-                    </List>
-                    <Divider/>
-                    <Button onClick={onValidate}>Validate</Button>
-                </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div className="PeopleEditor">
+                <List>
+                    <div className="SearchBar">
+                    <Search/><input type="text" onChange={onSearch} autoFocus></input>
+                    </div>
+
+                {people.length ? <Divider/>:<></>}
+                {people.map((p) => (
+                    <ListItem button id={p.name} onClick={() => {}}>
+                        <ListItemText primary={
+                            <div style={{display: 'flex', flexDirection: 'row'}}>
+                                <div style={{display: 'flex', flex: "5", textAlign: "left", flexDirection: 'column'}}>
+                                    <div>
+                                    <Typography style={{fontSize: "x-large"}}>{p.name}</Typography> 
+                                    <Typography style={{color: "grey"}}>{p.bornDate} {p.deathDate}</Typography>
+                                    </div>
+                                    <Typography style={{}}>{p.description}</Typography>
+                                </div>
+                                <div style={{display: 'flex', marginRight: "5px"}}>
+                                    {   p.picture ?
+                                            <img src={p.picture} alt={p.name}></img>
+                                            :<></>
+                                    }
+                                </div>
+                            </div>
+                        }/>
+                    </ListItem>
+                ))}
+                </List>
             </div>
+        </div>
         }
         </Modal>
     )
