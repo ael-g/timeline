@@ -1,6 +1,8 @@
 import {useState} from 'react';
 import {Modal, List, Typography, ListItem, ListItemText, Divider} from '@material-ui/core';
-import {People, Category} from './types'
+import {People} from './types'
+import db from './config/firebase';
+
 import {Search} from '@material-ui/icons';
 
 import './PeopleEditor.css';
@@ -8,9 +10,8 @@ import {getPeople} from './Wikidata';
 
 type PeopleEditorParamsType = {
     open: boolean;
-    people: People;
+    timelineId: string;
     onClose: any;
-    categories: Category[];
 }
 
 const getYear = (date:string) => {
@@ -26,8 +27,10 @@ const getYear = (date:string) => {
 }
 
 export default function PeopleEditor(params : PeopleEditorParamsType) {
-    const {open, onClose} = params;
+    const {open, onClose, timelineId} = params;
     const [people, setPeople] = useState<Array<People>>([])
+
+    console.log(timelineId)
 
     const onCloseInternal = () => {
         setPeople([])
@@ -52,6 +55,13 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
         setPeople(t)
     }
 
+    const onAddPeople = async (p: People) => {
+        const people = {...p, timelineLists: [timelineId]}
+        await db.collection('people').add(people);
+        onCloseInternal()
+        window.location.reload()
+    }
+
     return (
         <Modal
             open={open}
@@ -66,7 +76,7 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
 
                 {people.length ? <Divider/>:<></>}
                 {people.map((p) => (
-                    <ListItem button id={p.name} onClick={() => {}}>
+                    <ListItem button id={p.name} onClick={() => onAddPeople(p)}>
                         <ListItemText primary={
                             <div style={{display: 'flex', flexDirection: 'row'}}>
                                 <div style={{display: 'flex', flex: "5", textAlign: "left", flexDirection: 'column'}}>

@@ -26,10 +26,12 @@ const units = [ 10, 25, 50, 100 ]
 
 function Timeline(params: TimelineParams) {
   const { people, categories, events } = params;
+  const timelineIdMatch = window.location.pathname.match(/timelines\/(.+)$/)
+  const timelineId = timelineIdMatch ? timelineIdMatch[1]:''
 
   const [peopleSelected, setPeopleSelected] = useState<People>(makeDefaultPeople())
   const [isOpenPeopleEditor, setIsOpenPeopleEditor] = useState<boolean>(false)
-  const [unit, setUnit] = useState<number>(10)
+  const [unit, setUnit] = useState<number>(25)
 
   const setPeopleSelectedLocal = (p: People) => {
     setPeopleSelected(p)
@@ -60,7 +62,7 @@ function Timeline(params: TimelineParams) {
     let marginTop : number = 30
     
     for (let ii = 0 ; ii<=i ; ii++) {
-      marginTop = 30 + ((45 * ii))
+      marginTop = 30 + ((70 * ii))
 
       const predecessor = items.filter((p:any) => (
         p.marginTop === marginTop && p.deathDate > (item.bornDate - 10)
@@ -137,14 +139,18 @@ function Timeline(params: TimelineParams) {
       }
       {
         s.centuries.map(c => 
-          <a key={c.year} className="Centuries" style={{width: `${c.width}%`, left: `${c.left}%`, height: `${height}px`}}>{c.year}</a>
+          <a key={c.year} className="Centuries" style={{width: `${c.width}%`, left: `${c.left}%`, height: `100%`}}>{c.year}</a>
         )
       }
       {
-        <PeopleEditor open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)} people={peopleSelected} categories={categories}/>
+        <PeopleEditor open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)} timelineId={timelineId}/>
       }
       {
-        s.people.map(i => <PeopleDetails people={i} setPeopleSelected={setPeopleSelectedLocal}/>)
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+          {
+            s.people.map(i => <PeopleDetails people={i} setPeopleSelected={setPeopleSelectedLocal}/>)
+          }
+        </div>
       }
     </div>
   );
