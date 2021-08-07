@@ -55,10 +55,15 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
     }
 
     const onAddPeople = async (p: People) => {
-        const people = {...p, timelineLists: [timelineList.id]}
-        await db.collection('people').add(people);
-        onCloseInternal()
-        window.location.reload()
+        const timelineIdMatch = window.location.pathname.match(/timelines\/(.+)$/)
+        if(timelineIdMatch) {
+            const t = await db.collection('timelineLists').doc(timelineIdMatch[1]).get();
+            console.log(t)
+            const people = {...p, timelineLists: [t.id]}
+            await db.collection('people').add(people);
+            onCloseInternal()
+            window.location.reload()
+        }
     }
 
     return (

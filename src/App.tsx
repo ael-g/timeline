@@ -10,6 +10,7 @@ import Menu from './Menu';
 import Footer from './Footer';
 import Header from './Header';
 import TimelineListSelector from './TimelineListSelector'
+import db from './config/firebase'; 
 import {People, TimelineList, Category, Event} from './types';
 
 
@@ -19,6 +20,8 @@ function App() {
   const[categories, setCategories] = useState<Array<Category>>([]);
   const[timelineLists, setTimelineLists] = useState<Array<TimelineList>>([]);
   const[timelineList, setTimelineList] = useState<TimelineList>({id: '', name: ''});
+
+
 
   return (
   <Router basename={process.env.PUBLIC_URL}>

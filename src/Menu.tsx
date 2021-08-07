@@ -19,14 +19,6 @@ function Menu(params: MenuParams) {
      
     const { setPeople, setCategories, setEvents } = params;
 
-    // const timelineIdMatch = window.location.pathname.match(/timelines\/(.+)$/)
-    // if(timelineIdMatch) {
-    //     (async () => {
-    //         const t = await db.collection('timelineLists').doc(timelineIdMatch[1]).get();
-    //         console.log(t)
-    //         setTimelineList(t)
-    //     })()
-    // }
 
     useEffect(() => {
         getTimelineList(timelineId);
