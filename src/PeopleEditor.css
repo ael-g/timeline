@@ -1,5 +1,5 @@
 .PeopleEditor {
-    font-size: 14px;
+    /* font-size: 14px; */
     border-radius: 8px;
     background-color: white;
     padding: 5px;
@@ -13,8 +13,8 @@
 
 .SearchBar {
   margin: 10px;
-  font-size: 30px;
-  height: 40px;
+  font-size: 2vw;
+  /* height: 40px; */
 }
 
 img {
@@ -22,7 +22,7 @@ img {
 }
 
 input {
-  font-size: 30px;
+  /* font-size: 30px; */
   padding-left: 10px;
   color: grey;
   border: none;

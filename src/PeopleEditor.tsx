@@ -31,14 +31,13 @@ let searchCounter : number[] = [0]
 const newSearchCount = () => {
     const newSearch = searchCounter[searchCounter.length - 1] + 1;
     searchCounter.push(newSearch);
-    console.log('ADD NEW', newSearch, searchCounter)
+
     return newSearch;
 }
 
 const searchDone = (n: number) : boolean => {
     const i = searchCounter.indexOf(n)
     searchCounter.splice(i, 1)
-    console.log('REMOVE', n, searchCounter)
 
     return i === (searchCounter.length - 1)
 }
