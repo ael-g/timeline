@@ -26,6 +26,23 @@ const getYear = (date:string) => {
     return bce ? year * -1 : year;
 }
 
+let searchCounter : number[] = [0]
+
+const newSearchCount = () => {
+    const newSearch = searchCounter[searchCounter.length - 1] + 1;
+    searchCounter.push(newSearch);
+    console.log('ADD NEW', newSearch, searchCounter)
+    return newSearch;
+}
+
+const searchDone = (n: number) : boolean => {
+    const i = searchCounter.indexOf(n)
+    searchCounter.splice(i, 1)
+    console.log('REMOVE', n, searchCounter)
+
+    return i === (searchCounter.length - 1)
+}
+
 export default function PeopleEditor(params : PeopleEditorParamsType) {
     const {open, onClose, timelineList} = params;
     const [people, setPeople] = useState<Array<People>>([])
@@ -37,6 +54,7 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
     }
 
     const onSearch = async (e: any) => {
+        const searchCount = newSearchCount()
         const p = await getPeople(e.target.value)
         const t = p.map( (i:any) => {
             const birth = i.birth ? getYear(i.birth.value):'';
@@ -51,7 +69,11 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
                 picture,
                 description
             }})
-        setPeople(t)
+
+        if( searchDone(searchCount) ) {
+            console.log("setting people")
+            setPeople(t)
+        }
     }
 
     const onAddPeople = async (p: People) => {

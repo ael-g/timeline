@@ -73,6 +73,8 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
                     {
                     <CreateTimeline/>
                     }
+                </List>
+                <List style={{maxHeight: '60vh', overflow: 'scroll'}}>
                 {displayedTimelineLists.map((text) => (
                     <ListItem button id={text.name} onClick={() => onSelectTimeList(text)} key={text.name}>
                         <ListItemText primary={<Typography style={{fontSize: "x-large"}}>{text.name}</Typography>}/>
