@@ -53,8 +53,8 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
             userSearch ?
                 <div>
                 <ListItem button onClick={createTimeline} style={{display: "flex", flexDirection: "row"}}>
-                    <Typography style={{fontSize: "large", flex: "10"}}>Create timeline</Typography>
-                    <Typography style={{fontSize: "x-large", fontStyle: "italic", flex: "1"}}>{userSearch}</Typography>
+                    <Typography style={{flex: "10"}}>Create timeline</Typography>
+                    <Typography style={{fontStyle: "italic", flex: "1"}}>{userSearch}</Typography>
                 </ListItem>
                 <Divider/>
                 </div>
@@ -76,8 +76,14 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
                 </List>
                 <List style={{maxHeight: '40vh', overflow: 'scroll'}}>
                 {displayedTimelineLists.map((text) => (
-                    <ListItem button id={text.name} onClick={() => onSelectTimeList(text)} key={text.name}>
-                        <ListItemText primary={<Typography style={{fontSize: "2vw"}}>{text.name}</Typography>}/>
+                    <ListItem 
+                        id={text.name}
+                        onClick={() => onSelectTimeList(text)} key={text.name}
+                        // onMouseEnter={() => setDisplayDeleteIcon(true)} 
+                        // onMouseLeave={() => setDisplayDeleteIcon(false)}
+                        button 
+                        className='ListItem'>
+                        <ListItemText primary={<Typography>{text.name}</Typography>}/>
                     </ListItem>
                 ))}
                 </List>

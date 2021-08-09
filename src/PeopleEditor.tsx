@@ -26,22 +26,6 @@ const getYear = (date:string) => {
     return bce ? year * -1 : year;
 }
 
-let searchCounter : number[] = [0]
-
-const newSearchCount = () => {
-    const newSearch = searchCounter[searchCounter.length - 1] + 1;
-    searchCounter.push(newSearch);
-
-    return newSearch;
-}
-
-const searchDone = (n: number) : boolean => {
-    const i = searchCounter.indexOf(n)
-    searchCounter.splice(i, 1)
-
-    return i === (searchCounter.length - 1)
-}
-
 export default function PeopleEditor(params : PeopleEditorParamsType) {
     const {open, onClose, timelineList} = params;
     const [people, setPeople] = useState<Array<People>>([])
@@ -53,7 +37,6 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
     }
 
     const onSearch = async (e: any) => {
-        const searchCount = newSearchCount()
         const p = await getPeople(e.target.value)
         const t = p.map( (i:any) => {
             const birth = i.birth ? getYear(i.birth.value):'';
@@ -69,10 +52,7 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
                 description
             }})
 
-        if( searchDone(searchCount) ) {
-            console.log("setting people")
-            setPeople(t)
-        }
+        setPeople(t)
     }
 
     const onAddPeople = async (p: People) => {
@@ -106,10 +86,10 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
                             <div style={{display: 'flex', flexDirection: 'row'}}>
                                 <div style={{display: 'flex', flex: "5", textAlign: "left", flexDirection: 'column'}}>
                                     <div>
-                                    <Typography style={{fontSize: "x-large"}}>{p.name}</Typography> 
+                                    <Typography>{p.name}</Typography> 
                                     <Typography style={{color: "grey"}}>{p.bornDate} {p.deathDate}</Typography>
                                     </div>
-                                    <Typography style={{}}>{p.description}</Typography>
+                                    <Typography>{p.description}</Typography>
                                 </div>
                                 <div style={{display: 'flex', marginRight: "5px"}}>
                                     {   p.picture ?
