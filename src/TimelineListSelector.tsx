@@ -83,7 +83,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
                         // onMouseLeave={() => setDisplayDeleteIcon(false)}
                         button 
                         className='ListItem'>
-                        <ListItemText primary={<Typography>{text.name}</Typography>}/>
+                        <ListItemText primary={<Typography style={{fontSize: "1.5rem"}}>{text.name}</Typography>}/>
                     </ListItem>
                 ))}
                 </List>

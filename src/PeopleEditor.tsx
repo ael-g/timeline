@@ -6,7 +6,7 @@ import db from './config/firebase';
 import {Search} from '@material-ui/icons';
 
 import './PeopleEditor.css';
-import {getPeople} from './Wikidata';
+import {getPeople, getPeopleDetails} from './Wikidata';
 
 type PeopleEditorParamsType = {
     open: boolean;
@@ -14,22 +14,9 @@ type PeopleEditorParamsType = {
     onClose: any;
 }
 
-const getYear = (date:string) => {
-    const bce = date.match(/^-/);
-
-    let sanitizedDate = date
-    if(bce) {
-        sanitizedDate = sanitizedDate.substring(1);
-    }
-
-    const year = (new Date(sanitizedDate)).getFullYear()
-    return bce ? year * -1 : year;
-}
-
 export default function PeopleEditor(params : PeopleEditorParamsType) {
     const {open, onClose, timelineList} = params;
     const [people, setPeople] = useState<Array<People>>([])
-
 
     const onCloseInternal = () => {
         setPeople([])
@@ -37,33 +24,21 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
     }
 
     const onSearch = async (e: any) => {
-        const p = await getPeople(e.target.value)
-        const t = p.map( (i:any) => {
-            const birth = i.birth ? getYear(i.birth.value):'';
-            const death = i.death ? getYear(i.death.value):'';
-            const picture = i.picture ? i.picture.value:'';
-            const description = i.desc ? i.desc.value.charAt(0).toUpperCase() + i.desc.value.slice(1):''
-
-            return {
-                name: i.label.value,
-                bornDate: birth,
-                deathDate: death,
-                picture,
-                description
-            }})
-
-        setPeople(t)
+        const people = await getPeople(e.target.value)
+        setPeople(people)
     }
 
     const onAddPeople = async (p: People) => {
         const timelineIdMatch = window.location.pathname.match(/timelines\/(.+)$/)
         if(timelineIdMatch) {
             const t = await db.collection('timelineLists').doc(timelineIdMatch[1]).get();
-            console.log(t)
             const people = {...p, timelineLists: [t.id]}
-            await db.collection('people').add(people);
-            onCloseInternal()
-            window.location.reload()
+            const pd = await getPeopleDetails(people.qid ? people.qid: '')
+            console.log(pd)
+
+            // await db.collection('people').add(people);
+            // onCloseInternal()
+            // window.location.reload()
         }
     }
 
@@ -78,15 +53,16 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
                     <div className="SearchBar">
                     <Search/><input type="text" onChange={onSearch} autoFocus></input>
                     </div>
-
+                </List>
                 {people.length ? <Divider/>:<></>}
+                <List style={{maxHeight: "60vh", overflow: 'scroll'}}>
                 {people.map((p) => (
                     <ListItem button id={p.name} onClick={() => onAddPeople(p)}>
                         <ListItemText primary={
                             <div style={{display: 'flex', flexDirection: 'row'}}>
                                 <div style={{display: 'flex', flex: "5", textAlign: "left", flexDirection: 'column'}}>
                                     <div>
-                                    <Typography>{p.name}</Typography> 
+                                    <Typography style={{fontSize: '1.5rem'}}>{p.name}</Typography> 
                                     <Typography style={{color: "grey"}}>{p.bornDate} {p.deathDate}</Typography>
                                     </div>
                                     <Typography>{p.description}</Typography>

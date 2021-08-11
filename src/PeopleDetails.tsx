@@ -25,6 +25,10 @@ export default function PeopleDetails(params : PeopleDetailsParamsType) {
 
     const [displayDetails, setDisplayDetails] = useState<Boolean>(false)
 
+    const getPeopleDetails = (p: PeopleDisplayType) => {
+        // p.
+    }
+
     return (
         <div
             onMouseEnter={() => setDisplayDetails(true)} 
@@ -34,7 +38,7 @@ export default function PeopleDetails(params : PeopleDetailsParamsType) {
                 // <Details open={displayDetails}/>
             }
             <a  key={people.name}
-                onClick={() => setPeopleSelected(people)}
+                onClick={() => getPeopleDetails(people)}
                 className="People" style={{width: `${people.width}%`, left: `${people.left}%`, "marginTop": `${people.marginTop}px`}}>
                 <div className="Left">{people.bornDate}</div>
                 <div className="Centered">

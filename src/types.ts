@@ -1,5 +1,6 @@
 type People = {
     id: string;
+    qid?: string;
     name: string;
     picture: string;
     bornDate: number;
