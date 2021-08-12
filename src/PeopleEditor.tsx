@@ -32,13 +32,14 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
         const timelineIdMatch = window.location.pathname.match(/timelines\/(.+)$/)
         if(timelineIdMatch) {
             const t = await db.collection('timelineLists').doc(timelineIdMatch[1]).get();
-            const people = {...p, timelineLists: [t.id]}
+            let people = {...p, timelineList: t.id}
             const pd = await getPeopleDetails(people.qid ? people.qid: '')
-            console.log(pd)
+            people = {...people, ...pd}
+            console.log(people)
 
-            // await db.collection('people').add(people);
-            // onCloseInternal()
-            // window.location.reload()
+            await db.collection('people').add(people);
+            onCloseInternal()
+            window.location.reload()
         }
     }
 

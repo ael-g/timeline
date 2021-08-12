@@ -23,10 +23,25 @@ const makeDefaultPeople = () : People => {
   }
 }
 
+const expandPeople = (people: any) => {
+  // console.log(people)
+  const ret = people.map( (p:any) => p['positionHeld'].map( (q:any) => (
+  {
+    name: p.name,
+    description: q.value,
+    bornDate: q.start,
+    deathDate: q.end,
+  }) ).concat([p]) ).flat().sort((a:any, b:any) => {return a.name < b.name ? -1:1})
+  console.log(ret)
+  return ret
+}
+
 const units = [ 10, 25, 50, 100 ]
 
 function Timeline(params: TimelineParams) {
   const { people, categories, events, timelineList } = params;
+
+  const peopleExpanded = expandPeople(people)
 
   const [peopleSelected, setPeopleSelected] = useState<People>(makeDefaultPeople())
   const [isOpenPeopleEditor, setIsOpenPeopleEditor] = useState<boolean>(false)
@@ -108,9 +123,9 @@ function Timeline(params: TimelineParams) {
     return people.reduce((acc, val) => val.marginTop > acc ? val.marginTop:acc, -10000)
   }
 
-  const {min, max} = getTimelineRange(people);
+  const {min, max} = getTimelineRange(peopleExpanded);
   const centuries = computeCenturies(min, max);
-  const peopleComputed = computePeople(people, min, max);
+  const peopleComputed = computePeople(peopleExpanded, min, max);
   const eventsComputed = computeEvents(events, min, max);
   const height = computeHeight(peopleComputed);
   const s = {min, max, centuries, periods:[], people: peopleComputed, events: eventsComputed};

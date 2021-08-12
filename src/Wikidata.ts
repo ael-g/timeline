@@ -4,6 +4,9 @@ import {attributes, Qualifier} from './wikidata_attributes';
 const endpoint = "https://query.wikidata.org/sparql?format=json"
 
 const getYear = (date:string) => {
+    if(!date) {
+        return ''
+    }
     const bce = date.match(/^-/);
 
     let sanitizedDate = date
@@ -16,7 +19,14 @@ const getYear = (date:string) => {
 }
 
 const getField = (obj: any, key :string ) => {
-    return (obj[key]) ? obj[key].value:'';
+    let ret = ''
+
+    if (obj[key]) {
+        ret = obj[key].datatype === 'http://www.w3.org/2001/XMLSchema#dateTime' ?
+            getYear(obj[key].value) : obj[key].value
+    }
+
+    return ret
 }
 
 const capitalize = (s: string) : string => s.charAt(0).toUpperCase() + s.slice(1)
@@ -51,12 +61,11 @@ const getPeople = async (name: string) : Promise<People[]> => {
     const people = json.results.bindings.map( (i:any) => ({
             qid: getField(i, "item").replace("http://www.wikidata.org/entity/", ""),
             name: getField(i, "label"),
-            bornDate: getYear(getField(i, "birth")),
-            deathDate: getYear(getField(i, "death")),
+            bornDate: getField(i, "birth"),
+            deathDate: getField(i, "death"),
             picture: getField(i, "picture"),
             description: capitalize(getField(i, "desc"))
         }))
-    console.log(people)
     return people
 }
 
@@ -103,9 +112,8 @@ const getPeopleDetails = async (qid: string) => {
             [getAttrKey(b)]: getAttrValue(b)
         }
     })
-    console.log(peopleDetails)
 
-    // return peopleDetails
+    return peopleDetails
 }
 
 export {getPeople, getPeopleDetails}
