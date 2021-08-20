@@ -1,71 +1,9 @@
 .PeopleDetails {
-    display: block;
+    border-radius: 8px;
     background-color: white;
-    position: absolute;
-    z-index: 2;
-    width: 150px;
-    justify-content: center;
-    border-radius: 70px;
-    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)
-}
-
-.PeopleDetails img {
-  /* display: block; */
-  /* background-color: white;
-  position: absolute;
-  z-index: 2; */
-  max-height: 100%;
-  max-width: 100%;
-  /* transform: translate(0, 50%); */
-  /* object-fit: cover; */
-  /* justify-content: center; */
-  /* border-radius: 70px; */
-}
-
-.People {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    height: 45px;
-    color: #666;
-    border-radius: 48px;
-    background-color: rgba(180,180,144,.2);
     padding: 5px;
+    margin-top: 10vh;
+    margin-right: 30px;
+    margin-left: 30px;
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   }
-  
-.People:hover {
-  color: #666;
-  /* filter: drop-shadow(23 43 0.75rem rgba(180,180,144,.6)); */
-  background-color: rgba(180,180,144,.4);
-}
-
-.Centered {
-  display: flex;
-  flex-direction: column;
-  flex: 2;
-  text-align: center;
-}
-
-.Left {
-  flex: 1;
-  text-align: left;
-}
-
-.Right {
-  flex: 1;
-  text-align: right;
-}
-
-.EditPeople {
-  /* flex: 1 1; */
-  display: block;
-  position: absolute;
-  width: 100px;
-  color: rgb(186, 186, 186);
-}
-
-.EditPeople svg:hover {
-  border-radius: 10px;
-  color: rgb(50, 50, 50);
-  background-color: rgba(75, 75, 61, 0.147);
-}

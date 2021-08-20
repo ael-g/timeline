@@ -31,7 +31,7 @@ const getField = (obj: any, key :string ) => {
 
 const capitalize = (s: string) : string => s.charAt(0).toUpperCase() + s.slice(1)
 
-const getPeople = async (name: string) : Promise<People[]> => {
+const getPeople = async (name: string, signal: AbortSignal) : Promise<People[]> => {
     const query = `SELECT DISTINCT ?item ?label ?desc ?birth ?death ?picture WHERE {
             SERVICE wikibase:mwapi {
                 bd:serviceParam wikibase:endpoint "www.wikidata.org";
@@ -55,10 +55,10 @@ const getPeople = async (name: string) : Promise<People[]> => {
     const body = new URLSearchParams();
     body.append('query', query);
 
-    const response = await fetch(`${endpoint}&${body.toString()}`);
+    const response = await fetch(`${endpoint}&${body.toString()}`, {signal});
     const json = await response.json();
 
-    const people = json.results.bindings.map( (i:any) => ({
+    let people = json.results.bindings.map( (i:any) => ({
             qid: getField(i, "item").replace("http://www.wikidata.org/entity/", ""),
             name: getField(i, "label"),
             bornDate: getField(i, "birth"),
@@ -66,6 +66,10 @@ const getPeople = async (name: string) : Promise<People[]> => {
             picture: getField(i, "picture"),
             description: capitalize(getField(i, "desc"))
         }))
+
+    people = people.filter((v:any,i:any,a:any)=>a.findIndex((t:any)=>(t.name === v.name))===i)
+
+    console.log(people)
     return people
 }
 

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useRef} from 'react';
 import {Modal, List, Typography, ListItem, ListItemText, Divider} from '@material-ui/core';
 import {People, TimelineList} from './types'
 import db from './config/firebase';
@@ -18,13 +18,21 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
     const {open, onClose, timelineList} = params;
     const [people, setPeople] = useState<Array<People>>([])
 
+    const previousSearch = useRef<AbortController>();
+
     const onCloseInternal = () => {
         setPeople([])
         onClose()
     }
 
     const onSearch = async (e: any) => {
-        const people = await getPeople(e.target.value)
+        if (previousSearch.current) {
+            previousSearch.current.abort();
+        }
+        const controller = new AbortController()
+        previousSearch.current = controller;
+
+        const people = await getPeople(e.target.value, controller.signal)
         setPeople(people)
     }
 
@@ -33,9 +41,9 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
         if(timelineIdMatch) {
             const t = await db.collection('timelineLists').doc(timelineIdMatch[1]).get();
             let people = {...p, timelineList: t.id}
-            const pd = await getPeopleDetails(people.qid ? people.qid: '')
-            people = {...people, ...pd}
-            console.log(people)
+            // const pd = await getPeopleDetails(people.qid ? people.qid: '')
+            // people = {...people, ...pd}
+            // console.log(people)
 
             await db.collection('people').add(people);
             onCloseInternal()

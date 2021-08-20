@@ -3,6 +3,7 @@ import {Add as AddIcon, Remove as RemoveIcon} from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
 import {People, Category, Event, TimelineList} from './types'
 import PeopleEditor from './PeopleEditor'
+import PeopleBar from './PeopleBar'
 import PeopleDetails from './PeopleDetails'
 import './Timeline.css'
 
@@ -24,16 +25,16 @@ const makeDefaultPeople = () : People => {
 }
 
 const expandPeople = (people: any) => {
-  // console.log(people)
-  const ret = people.map( (p:any) => p['positionHeld'].map( (q:any) => (
-  {
-    name: p.name,
-    description: q.value,
-    bornDate: q.start,
-    deathDate: q.end,
-  }) ).concat([p]) ).flat().sort((a:any, b:any) => {return a.name < b.name ? -1:1})
-  console.log(ret)
-  return ret
+  return people
+  // const ret = people.map( (p:any) => p['positionHeld'].map( (q:any) => (
+  // {
+  //   name: p.name,
+  //   description: q.value,
+  //   bornDate: q.start,
+  //   deathDate: q.end,
+  // }) ).concat([p]) ).flat().sort((a:any, b:any) => {return a.name < b.name ? -1:1})
+  // console.log(ret)
+  // return ret
 }
 
 const units = [ 10, 25, 50, 100 ]
@@ -45,11 +46,12 @@ function Timeline(params: TimelineParams) {
 
   const [peopleSelected, setPeopleSelected] = useState<People>(makeDefaultPeople())
   const [isOpenPeopleEditor, setIsOpenPeopleEditor] = useState<boolean>(false)
+  const [isOpenPeopleDetails, setIsOpenPeopleDetails] = useState<boolean>(false)
   const [unit, setUnit] = useState<number>(25)
 
   const setPeopleSelectedLocal = (p: People) => {
     setPeopleSelected(p)
-    setIsOpenPeopleEditor(true)
+    setIsOpenPeopleDetails(true)
   }
 
   const getTimelineRange = (items :People[]) => {  
@@ -160,9 +162,12 @@ function Timeline(params: TimelineParams) {
         <PeopleEditor open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)} timelineList={timelineList}/>
       }
       {
+        <PeopleDetails open={isOpenPeopleDetails} onClose={() => setIsOpenPeopleDetails(false)} people={peopleSelected}/>
+      }
+      {
         <div style={{display: 'flex', flexDirection: 'column'}}>
           {
-            s.people.map(i => <PeopleDetails people={i} setPeopleSelected={setPeopleSelectedLocal}/>)
+            s.people.map(i => <PeopleBar people={i} setPeopleSelected={setPeopleSelectedLocal}/>)
           }
         </div>
       }
