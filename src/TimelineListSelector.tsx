@@ -1,6 +1,6 @@
 import { List, ListItem, ListItemText, Divider, Typography } from "@material-ui/core";
 import {useEffect, useState} from 'react'
-import {Search} from '@material-ui/icons';
+import {Search, HighlightOff as Delete} from '@material-ui/icons';
 import db from './config/firebase';
 import {TimelineList} from './types';
 import './TimelineListSelector.css';
@@ -62,6 +62,32 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
         )
     }
 
+    const deleteTimeline = async (id: string) => {
+        const ret = await db.collection('timelineLists').doc(id).delete();
+        window.location.assign(`${process.env.PUBLIC_URL}`);   
+    }
+
+    const TimelineBar = (params: any) => {
+        const [displayDeleteIcon, setDisplayDeleteIcon] = useState<Boolean>(false)
+        const { text } = params
+
+        return (
+        <ListItem 
+            id={text.name}
+            onMouseEnter={() => setDisplayDeleteIcon(true)} 
+            onMouseLeave={() => setDisplayDeleteIcon(false)}
+            button 
+            className='ListItem'>
+            <ListItemText primary={
+                <div style={{display: 'flex', flexDirection: 'row'}}>
+                <Typography onClick={() => onSelectTimeList(text)} key={text.name} style={{fontSize: "1.5rem", width: '97%'}}>{text.name}</Typography>
+                <div style={{display: (displayDeleteIcon ? 'flex':'none'), alignItems: 'center', color: 'grey'}}><Delete onClick={() => deleteTimeline(text.id)}/></div>
+                </div>
+            }/>
+        </ListItem>
+        )
+    }
+
     return (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div className="TimelineListSelector">
@@ -75,17 +101,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
                     }
                 </List>
                 <List style={{maxHeight: '40vh', overflow: 'scroll'}}>
-                {displayedTimelineLists.map((text) => (
-                    <ListItem 
-                        id={text.name}
-                        onClick={() => onSelectTimeList(text)} key={text.name}
-                        // onMouseEnter={() => setDisplayDeleteIcon(true)} 
-                        // onMouseLeave={() => setDisplayDeleteIcon(false)}
-                        button 
-                        className='ListItem'>
-                        <ListItemText primary={<Typography style={{fontSize: "1.5rem"}}>{text.name}</Typography>}/>
-                    </ListItem>
-                ))}
+                {displayedTimelineLists.map((text) => <TimelineBar text={text}/>)}
                 </List>
             </div>
         </div>
