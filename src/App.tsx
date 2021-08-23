@@ -10,7 +10,6 @@ import Menu from './Menu';
 import Footer from './Footer';
 import Header from './Header';
 import TimelineListSelector from './TimelineListSelector'
-import TimelineD3 from './TimelineD3'
 import {People, TimelineList, Category, Event} from './types';
 
 

@@ -18,7 +18,7 @@ const PeopleDetails = (params: PeopleDetailsParamsType) => {
             // style={{margin: '10px'}}
             fullWidth={true}
         >
-            <div>sqdqsd</div>
+            <div>{people.name}</div>
         {/* <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
             <div className="PeopleDetails">
                 hello
