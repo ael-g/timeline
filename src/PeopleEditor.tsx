@@ -32,8 +32,13 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
         const controller = new AbortController()
         previousSearch.current = controller;
 
-        const people = await getPeople(e.target.value, controller.signal)
-        setPeople(people)
+        try {
+            const people = await getPeople(e.target.value, controller.signal)
+            setPeople(people)
+        } catch (e) {
+            // properly handle abortion
+        }
+        
     }
 
     const onAddPeople = async (p: People) => {
@@ -41,7 +46,7 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
         if(timelineIdMatch) {
             const t = await db.collection('timelineLists').doc(timelineIdMatch[1]).get();
             let people = {...p, timelineList: t.id}
-            // const pd = await getPeopleDetails(people.qid ? people.qid: '')
+            // const pd = people.qid ? await getPeopleDetails(people.qid): {}
             // people = {...people, ...pd}
             // console.log(people)
 

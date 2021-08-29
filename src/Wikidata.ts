@@ -3,6 +3,10 @@ import {attributes, Qualifier} from './wikidata_attributes';
 
 const endpoint = "https://query.wikidata.org/sparql?format=json"
 
+// https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q129857&sitefilter=frwiki&languages=fr&format=json
+
+// https://www.wikidata.org/w/api.php?action=wbsearchentities&search=cice&language=fr&strictlanguage=true&format=json
+
 const getYear = (date:string) => {
     if(!date) {
         return ''
@@ -32,7 +36,7 @@ const getField = (obj: any, key :string ) => {
 const capitalize = (s: string) : string => s.charAt(0).toUpperCase() + s.slice(1)
 
 const getPeople = async (name: string, signal: AbortSignal) : Promise<People[]> => {
-    const query = `SELECT DISTINCT ?item ?label ?desc ?birth ?death ?picture WHERE {
+    const query = `SELECT DISTINCT ?item ?label ?desc ?birth ?death ?picture ?wikipedia ?wikiquote WHERE {
             SERVICE wikibase:mwapi {
                 bd:serviceParam wikibase:endpoint "www.wikidata.org";
                                 wikibase:api "EntitySearch";
@@ -46,6 +50,16 @@ const getPeople = async (name: string, signal: AbortSignal) : Promise<People[]> 
             OPTIONAL { ?item wdt:P569 ?birth. }
             OPTIONAL { ?item wdt:P570 ?death. }
             OPTIONAL { ?item wdt:P18 ?picture. }
+            OPTIONAL {
+                ?wikipedia schema:about ?item .
+                ?wikipedia schema:inLanguage "fr" .
+                ?wikipedia schema:isPartOf <https://fr.wikipedia.org/> .
+            }
+            OPTIONAL {
+                ?wikiquote schema:about ?item .
+                ?wikiquote schema:inLanguage "fr" .
+                ?wikiquote schema:isPartOf <https://fr.wikiquote.org/> .
+            }
             ?item schema:description ?desc .
             FILTER(LANG(?label) = "fr" )
             FILTER(LANG(?desc) = "fr" )
@@ -64,6 +78,8 @@ const getPeople = async (name: string, signal: AbortSignal) : Promise<People[]> 
             bornDate: getField(i, "birth"),
             deathDate: getField(i, "death"),
             picture: getField(i, "picture"),
+            wikipedia: getField(i, "wikipedia"),
+            wikiquote: getField(i, "wikiquote"),
             description: capitalize(getField(i, "desc"))
         }))
 
@@ -79,7 +95,7 @@ const getAttrValue = (a:any) => a[Object.keys(a)[0]]
 const getQualifiers = async (qid: string, qualifier: Qualifier) => {
     const optProps = qualifier.attr.map(p => `?q_stmt pq:${getAttrValue(p)} ?${getAttrKey(p)}.`).join('\n')
 
-    const query = `SELECT DISTINCT ?name ` + qualifier.attr.map(p => `?${getAttrKey(p)}`).join(' ') + 
+    const query = `SELECT DISTINCT ?name` + qualifier.attr.map(p => `?${getAttrKey(p)}`).join(' ') + 
     ` WHERE {
         VALUES  ?item                   {wd:${qid}}
 

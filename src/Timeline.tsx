@@ -25,22 +25,21 @@ const makeDefaultPeople = () : People => {
 }
 
 const expandPeople = (people: any) => {
-  return people
-  // const ret = people.map( (p:any) => p['positionHeld'].map( (q:any) => (
-  // {
-  //   name: p.name,
-  //   description: q.value,
-  //   bornDate: q.start,
-  //   deathDate: q.end,
-  // }) ).concat([p]) ).flat().sort((a:any, b:any) => {return a.name < b.name ? -1:1})
-  // console.log(ret)
-  // return ret
+  // return people
+  const ret = people.map( (p:any) => p['positionHeld'] ? p['positionHeld'].map( (q:any) => (
+  {
+    name: p.name,
+    description: q.value,
+    bornDate: q.start,
+    deathDate: q.end,
+  }) ).concat([p]) : p ).flat().sort((a:any, b:any) => {return a.name < b.name ? -1:1})
+  return ret
 }
 
 const units = [ 10, 25, 50, 100 ]
 
 function Timeline(params: TimelineParams) {
-  const { people, categories, events, timelineList } = params;
+  const { people, timelineList } = params;
 
   const peopleExpanded = expandPeople(people)
 
@@ -101,36 +100,32 @@ function Timeline(params: TimelineParams) {
       const left = 100 * (item.bornDate - min) / (max - min)
       const marginTop = findMarginTop(people, item, i)
 
-      people.push({width, left, id: item.id, name: item.name, bornDate: item.bornDate, deathDate: item.deathDate, picture: item.picture, description: item.description, marginTop})
+      people.push({
+        width, 
+        left, 
+        id: item.id, 
+        name: item.name, 
+        bornDate: item.bornDate, 
+        deathDate: item.deathDate, 
+        picture: item.picture, 
+        description: item.description,
+        wikipedia: item.wikipedia, 
+        wikiquote: item.wikiquote, 
+        marginTop})
     }
 
     return people
   }
 
-  const computeEvents = (items: Event[], min: number, max: number) => {
-    let events = []
-    for(let i=0 ; i< items.length ; i++) {
-      const item = items[i]
-      
-      const left = 100 * (item.date - min) / (max - min)
-      const marginTop = 30 + ((45 * i))
-
-      events.push({left, id: item.id, name: item.name, date: item.date, marginTop})
-    }
-
-    return events
-  }
-
-  const computeHeight = (people: any[]) => {
-    return people.reduce((acc, val) => val.marginTop > acc ? val.marginTop:acc, -10000)
-  }
+  // const computeHeight = (people: any[]) => {
+  //   return people.reduce((acc, val) => val.marginTop > acc ? val.marginTop:acc, -10000)
+  // }
 
   const {min, max} = getTimelineRange(peopleExpanded);
   const centuries = computeCenturies(min, max);
   const peopleComputed = computePeople(peopleExpanded, min, max);
-  const eventsComputed = computeEvents(events, min, max);
-  const height = computeHeight(peopleComputed);
-  const s = {min, max, centuries, periods:[], people: peopleComputed, events: eventsComputed};
+  // const height = computeHeight(peopleComputed);
+  const s = {min, max, centuries, periods:[], people: peopleComputed};
 
   const onChangeUnit = (val:number) => {
     const i = units.indexOf(unit) + val

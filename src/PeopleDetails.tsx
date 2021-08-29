@@ -15,15 +15,32 @@ const PeopleDetails = (params: PeopleDetailsParamsType) => {
         <Dialog
             open={open}
             onClose={onClose}
-            // style={{margin: '10px'}}
-            fullWidth={true}
+            PaperProps={{
+                style: {
+                    width: '60%'
+                },
+              }}
         >
-            <div>{people.name}</div>
-        {/* <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div className="PeopleDetails">
-                hello
+        <div style={{display: 'flex', flexDirection:'column'}}>
+            <div style={{display: 'flex', flexDirection:'row'}}>
+                <div style={{flex: "1 1 0"}}>
+                    <img style={{margin: '10px', maxWidth: '100px', boxShadow: '-4px 4px 4px 2px grey'}} src={people.picture}/>
+                </div>
+                <div style={{display: 'flex', flexDirection:'column', flex: "8 1 0"}}>
+                    <div style={{fontSize: '2rem'}}>{people.name}</div>
+                    <div style={{color: "grey", marginTop: '6px'}}>
+                        {people.bornDate}  {people.deathDate}
+                    </div>
+                    <div style={{marginTop: '30px'}}>
+                        {people.description}
+                    </div>
+                    <div style={{display: 'flex', flexDirection:'row', width: '35%', marginTop: '10px'}}>
+                    {people.wikipedia ? <div style={{flex: '1 0 0', textAlign: 'left'}}><a href={people.wikipedia} target="_blank" rel="noopener noreferrer">Wikipedia</a></div>: <></>}
+                    {people.wikiquote ? <div style={{flex: '1 0 0', textAlign: 'right'}}><a href={people.wikiquote} target="_blank" rel="noopener noreferrer">Wikiquote</a></div>: <></>}
+                    </div>
+                </div>
             </div>
-        </div> */}
+        </div>
         </Dialog>
     )
 }

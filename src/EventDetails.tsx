@@ -16,7 +16,6 @@ type EventDisplayType = {
 
 export default function EventDetails(params : EventDetailsParamsType) {
     const {event} = params;
-console.log(event)
     return (
         <div>
             <a  key={event.name}

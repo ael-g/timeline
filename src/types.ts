@@ -6,6 +6,8 @@ type People = {
     bornDate: number;
     deathDate: number;
     description?: string;
+    wikipedia?: string;
+    wikiquote?: string;
 };
 
 type TimelineList = {
@@ -17,7 +19,6 @@ type Category = {
     id: string;
     name: string;
 }
-
 
 type Event = {
     id: string;
