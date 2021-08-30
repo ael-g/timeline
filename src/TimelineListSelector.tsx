@@ -2,6 +2,7 @@ import { List, ListItem, ListItemText, Divider, Typography } from "@material-ui/
 import {useEffect, useState} from 'react'
 import {Search, HighlightOff as Delete} from '@material-ui/icons';
 import db from './config/firebase';
+import {getSignedInUser} from './Authentication'
 import {TimelineList} from './types';
 import './TimelineListSelector.css';
 
@@ -40,9 +41,13 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
 
     const CreateTimeline = () => {
         const createTimeline = async () => {
+            const user = await getSignedInUser()
+            const userEmail = user ? user.email : 'unable-to-loggin'
+            
             if(userSearch) {
                 const t = {
-                    name: userSearch
+                    name: userSearch,
+                    userEmail,
                 }
                 const ret = await db.collection('timelineLists').add(t);
                 window.location.assign(`${process.env.PUBLIC_URL}/timelines/${ret.id}`);

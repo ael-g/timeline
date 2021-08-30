@@ -24,7 +24,7 @@ const PeopleDetails = (params: PeopleDetailsParamsType) => {
         <div style={{display: 'flex', flexDirection:'column'}}>
             <div style={{display: 'flex', flexDirection:'row'}}>
                 <div style={{flex: "1 1 0"}}>
-                    <img style={{margin: '10px', maxWidth: '100px', boxShadow: '-4px 4px 4px 2px grey'}} src={people.picture}/>
+                    <img style={{margin: '10px', maxWidth: '100px', minWidth: '100px', boxShadow: '-4px 4px 4px 2px grey'}} src={people.picture}/>
                 </div>
                 <div style={{display: 'flex', flexDirection:'column', flex: "8 1 0"}}>
                     <div style={{fontSize: '2rem'}}>{people.name}</div>

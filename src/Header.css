@@ -1,18 +1,33 @@
 .Header {
   color: #666;
-  height: 35px;
-  font-size: 2rem;
   position: fixed;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   z-index: 2;
   top: 0;
   width: 100%;
-  align-items: center;
   font-weight: bold;
   background-color: #f0f0e9;
-  text-align: left;
-  padding-left: 1rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+}
+
+.Header a {
+  padding: 10px;
+  text-decoration: none;
+  color: #666;
+}
+
+.Header button {
+  padding: 10px;
+  text-decoration: none;
+  color: #666;
+  font-size: 1.2rem;
+}
+
+
+input, button { border:none; } 
+
+input:focus {
+  outline: none;
 }

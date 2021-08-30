@@ -6,22 +6,24 @@ import db from './config/firebase';
 import {Search} from '@material-ui/icons';
 
 import './PeopleEditor.css';
+import {getPeople as getPeopleFirestore} from './PeopleController'
 import {getPeople, getPeopleDetails} from './Wikidata';
 
 type PeopleEditorParamsType = {
     open: boolean;
-    timelineList: TimelineList;
+    timelineId: string;
+    setPeople: Function;
     onClose: any;
 }
 
 export default function PeopleEditor(params : PeopleEditorParamsType) {
-    const {open, onClose, timelineList} = params;
-    const [people, setPeople] = useState<Array<People>>([])
+    const {open, onClose, timelineId, setPeople} = params;
+    const [peopleLocal, setPeopleLocal] = useState<Array<People>>([])
 
     const previousSearch = useRef<AbortController>();
 
     const onCloseInternal = () => {
-        setPeople([])
+        setPeopleLocal([])
         onClose()
     }
 
@@ -34,7 +36,7 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
 
         try {
             const people = await getPeople(e.target.value, controller.signal)
-            setPeople(people)
+            setPeopleLocal(people)
         } catch (e) {
             // properly handle abortion
         }
@@ -42,18 +44,16 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
     }
 
     const onAddPeople = async (p: People) => {
-        const timelineIdMatch = window.location.pathname.match(/timelines\/(.+)$/)
-        if(timelineIdMatch) {
-            const t = await db.collection('timelineLists').doc(timelineIdMatch[1]).get();
-            let people = {...p, timelineList: t.id}
-            // const pd = people.qid ? await getPeopleDetails(people.qid): {}
-            // people = {...people, ...pd}
-            // console.log(people)
-
-            await db.collection('people').add(people);
-            onCloseInternal()
-            window.location.reload()
-        }
+        const t = await db.collection('timelineLists').doc(timelineId).get();
+        let peopleAdd = {...p, timelineList: t.id}
+        await db.collection('people').add(peopleAdd);
+        
+        const people = await getPeopleFirestore({
+            id: timelineId,
+            name: 'not-used'
+        });
+        await setPeople(people);
+        onCloseInternal()
     }
 
     return (
@@ -68,9 +68,9 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
                     <Search/><input type="text" onChange={onSearch} autoFocus></input>
                     </div>
                 </List>
-                {people.length ? <Divider/>:<></>}
+                {peopleLocal.length ? <Divider/>:<></>}
                 <List style={{maxHeight: "60vh", overflow: 'scroll'}}>
-                {people.map((p) => (
+                {peopleLocal.map((p) => (
                     <ListItem button id={p.name} onClick={() => onAddPeople(p)}>
                         <ListItemText primary={
                             <div style={{display: 'flex', flexDirection: 'row'}}>

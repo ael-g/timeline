@@ -18,9 +18,6 @@ function App() {
   const[events, setEvents] = useState<Array<Event>>([]);
   const[categories, setCategories] = useState<Array<Category>>([]);
   const[timelineLists, setTimelineLists] = useState<Array<TimelineList>>([]);
-  const[timelineList, setTimelineList] = useState<TimelineList>({id: '', name: ''});
-
-
 
   return (
   <Router basename={process.env.PUBLIC_URL}>
@@ -33,7 +30,7 @@ function App() {
               <Menu setPeople={setPeople} setCategories={setCategories} setEvents={setEvents}/>
             </div>
             <div>
-              <Timeline people={people} categories={categories} timelineList={timelineList} events={events}/>
+              <Timeline people={people} categories={categories} events={events} setPeople={setPeople}/>
             </div>
           </div>
         </Route>

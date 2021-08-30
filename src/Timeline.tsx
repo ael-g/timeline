@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {useParams} from "react-router-dom";
 import {Add as AddIcon, Remove as RemoveIcon} from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
 import {People, Category, Event, TimelineList} from './types'
@@ -9,9 +10,13 @@ import './Timeline.css'
 
 type TimelineParams = {
   people: People[];
+  setPeople: Function;
   categories: Category[];
   events: Event[];
-  timelineList: TimelineList;
+}
+
+type TimelineRouterParams = {
+  timelineId: string;
 }
 
 const makeDefaultPeople = () : People => {
@@ -25,7 +30,7 @@ const makeDefaultPeople = () : People => {
 }
 
 const expandPeople = (people: any) => {
-  // return people
+  return people
   const ret = people.map( (p:any) => p['positionHeld'] ? p['positionHeld'].map( (q:any) => (
   {
     name: p.name,
@@ -39,7 +44,9 @@ const expandPeople = (people: any) => {
 const units = [ 10, 25, 50, 100 ]
 
 function Timeline(params: TimelineParams) {
-  const { people, timelineList } = params;
+  const { timelineId } = useParams<TimelineRouterParams>();
+
+  const { people, setPeople } = params;
 
   const peopleExpanded = expandPeople(people)
 
@@ -154,7 +161,7 @@ function Timeline(params: TimelineParams) {
         )
       }
       {
-        <PeopleEditor open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)} timelineList={timelineList}/>
+        <PeopleEditor timelineId={timelineId} setPeople={setPeople} open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)}/>
       }
       {
         <PeopleDetails open={isOpenPeopleDetails} onClose={() => setIsOpenPeopleDetails(false)} people={peopleSelected}/>
