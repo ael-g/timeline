@@ -1,8 +1,9 @@
 import { List, ListItem, ListItemText, Divider, Typography } from "@material-ui/core";
 import {useEffect, useState} from 'react'
+import firebase from 'firebase'
 import {Search, HighlightOff as Delete} from '@material-ui/icons';
 import db from './config/firebase';
-import {getSignedInUser} from './Authentication'
+import {getSignedInUser, getSignedInUserWithoutSignin} from './Authentication'
 import {TimelineList} from './types';
 import './TimelineListSelector.css';
 
@@ -14,11 +15,20 @@ type TimelineListSelectorParams = {
 export default function TimelineListSelector(params: TimelineListSelectorParams) {
     const {timelineLists, setTimelineLists} = params;
     const [userSearch, setUserSearch] = useState<string>()
+    const [userSignedIn, setUserSignedIn] = useState<firebase.User>()
     const [displayedTimelineLists, setDisplayedTimelineLists] = useState<Array<TimelineList>>(timelineLists)
 
     useEffect(() => {
         getTimelineLists();
+        getUser();
     }, []);
+
+    const getUser = async () => {
+        const user = await getSignedInUserWithoutSignin()
+        if(user) {
+            setUserSignedIn(user)
+        }
+    }
 
     const getTimelineLists = async () => {
         const col = await db.collection('timelineLists').orderBy('name').get();
@@ -42,7 +52,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
     const CreateTimeline = () => {
         const createTimeline = async () => {
             const user = await getSignedInUser()
-            const userEmail = user ? user.email : 'unable-to-loggin'
+            const userEmail = user ? user.email : 'unable-to-login'
             
             if(userSearch) {
                 const t = {
@@ -68,25 +78,46 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
     }
 
     const deleteTimeline = async (id: string) => {
-        const ret = await db.collection('timelineLists').doc(id).delete();
+        // TODO: delete associated people
+        await db.collection('timelineLists').doc(id).delete();
         window.location.assign(`${process.env.PUBLIC_URL}`);   
     }
 
     const TimelineBar = (params: any) => {
-        const [displayDeleteIcon, setDisplayDeleteIcon] = useState<Boolean>(false)
-        const { text } = params
+        const [displayDeleteIcon, setDisplayDeleteIcon] = useState<Boolean>(false);
+        const { timeline } = params;
+        const isOwnTimeline = (userSignedIn && userSignedIn.email === timeline.userEmail) || false
 
         return (
         <ListItem 
-            id={text.name}
-            onMouseEnter={() => setDisplayDeleteIcon(true)} 
+            id={timeline.name}
+            onMouseEnter={() => setDisplayDeleteIcon(isOwnTimeline)} 
             onMouseLeave={() => setDisplayDeleteIcon(false)}
             button 
             className='ListItem'>
-            <ListItemText primary={
-                <div style={{display: 'flex', flexDirection: 'row'}}>
-                <Typography onClick={() => onSelectTimeList(text)} key={text.name} style={{fontSize: "1.5rem", width: '97%'}}>{text.name}</Typography>
-                <div style={{display: (displayDeleteIcon ? 'flex':'none'), alignItems: 'center', color: 'grey'}}><Delete onClick={() => deleteTimeline(text.id)}/></div>
+            <ListItemText
+                 key={timeline.name}
+                 primary={
+                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                        <Typography onClick={() => onSelectTimeList(timeline)} 
+                            key={timeline.name} 
+                            style={{
+                                fontSize: "1.5rem", 
+                                flex: '10 0 0'
+                            }}
+                            >
+                            {timeline.name} - {timeline.userEmail}
+                        </Typography>
+                        {
+                            isOwnTimeline ? <div style={{
+                                flex: '1 0 0', background: '#4895ef', borderRadius: '25px', color: 'white', padding: '3px 8px 3px 8px', marginLeft: '15px'
+                            }}>Yours</div>:<></>
+                        }
+                    </div>
+                <div style={{display: (displayDeleteIcon ? 'flex':'none'), alignItems: 'center', color: 'grey'}}>
+                    <Delete onClick={() => deleteTimeline(timeline.id)}/>
+                </div>
                 </div>
             }/>
         </ListItem>
@@ -106,7 +137,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
                     }
                 </List>
                 <List style={{maxHeight: '40vh', overflow: 'scroll'}}>
-                {displayedTimelineLists.map((text) => <TimelineBar text={text}/>)}
+                {displayedTimelineLists.map((timeline) => <TimelineBar timeline={timeline}/>)}
                 </List>
             </div>
         </div>

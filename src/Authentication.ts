@@ -9,6 +9,10 @@ const disconnect = async () => {
     await firebase.auth().signOut()
 }
 
+const getSignedInUserWithoutSignin = async () => {
+    return firebase.auth().currentUser
+}
+
 const getSignedInUser = async () => {
     let user = firebase.auth().currentUser
     if (!user) {
@@ -19,4 +23,4 @@ const getSignedInUser = async () => {
     return user;
 }
 
-export {signInPopup, disconnect, getSignedInUser};
+export {signInPopup, disconnect, getSignedInUser, getSignedInUserWithoutSignin};

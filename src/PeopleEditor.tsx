@@ -50,7 +50,8 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
         
         const people = await getPeopleFirestore({
             id: timelineId,
-            name: 'not-used'
+            name: 'not-used',
+            userEmail: '',
         });
         await setPeople(people);
         onCloseInternal()

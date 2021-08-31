@@ -1,11 +1,16 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import {Add as AddIcon, Remove as RemoveIcon} from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
-import {People, Category, Event, TimelineList} from './types'
-import PeopleEditor from './PeopleEditor'
-import PeopleBar from './PeopleBar'
-import PeopleDetails from './PeopleDetails'
+import {People, Category, Event} from './types';
+import PeopleEditor from './PeopleEditor';
+import PeopleBar from './PeopleBar';
+import PeopleDetails from './PeopleDetails';
+import {getSignedInUserWithoutSignin} from './Authentication';
+import { TimelineList } from './types';
+import db from './config/firebase';
+
+
 import './Timeline.css'
 
 type TimelineParams = {
@@ -48,16 +53,31 @@ function Timeline(params: TimelineParams) {
 
   const { people, setPeople } = params;
 
-  const peopleExpanded = expandPeople(people)
+  // const peopleExpanded = expandPeople(people)
 
   const [peopleSelected, setPeopleSelected] = useState<People>(makeDefaultPeople())
   const [isOpenPeopleEditor, setIsOpenPeopleEditor] = useState<boolean>(false)
   const [isOpenPeopleDetails, setIsOpenPeopleDetails] = useState<boolean>(false)
+  const [isOwnTimeline, setIsOwnTimeline] = useState<boolean>(false)
+  console.log(isOwnTimeline)
+
   const [unit, setUnit] = useState<number>(25)
 
   const setPeopleSelectedLocal = (p: People) => {
     setPeopleSelected(p)
     setIsOpenPeopleDetails(true)
+  }
+
+  useEffect(() => {
+    getIsOwnTimeline();
+  }, []);
+
+  const getIsOwnTimeline = async () => {
+      const user = await getSignedInUserWithoutSignin()
+      const timeline = await db.collection('timelineLists').doc(timelineId).get();
+      const t = {id: timeline.id, ...timeline.data()} as TimelineList
+      const iot = (user && user.email === t.userEmail) || false
+      setIsOwnTimeline(iot)
   }
 
   const getTimelineRange = (items :People[]) => {  
@@ -124,13 +144,9 @@ function Timeline(params: TimelineParams) {
     return people
   }
 
-  // const computeHeight = (people: any[]) => {
-  //   return people.reduce((acc, val) => val.marginTop > acc ? val.marginTop:acc, -10000)
-  // }
-
-  const {min, max} = getTimelineRange(peopleExpanded);
+  const {min, max} = getTimelineRange(people);
   const centuries = computeCenturies(min, max);
-  const peopleComputed = computePeople(peopleExpanded, min, max);
+  const peopleComputed = computePeople(people, min, max);
   // const height = computeHeight(peopleComputed);
   const s = {min, max, centuries, periods:[], people: peopleComputed};
 
@@ -151,9 +167,10 @@ function Timeline(params: TimelineParams) {
         </div>
       }
       {
+        isOwnTimeline ? 
         <div className="AddItem">
           <AddIcon onClick={() => setIsOpenPeopleEditor(true)}/>
-        </div>
+        </div> : <></>
       }
       {
         s.centuries.map(c => 

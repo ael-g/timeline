@@ -13,6 +13,7 @@ type People = {
 type TimelineList = {
     id: string;
     name: string;
+    userEmail: string;
 };
 
 type Category = {
