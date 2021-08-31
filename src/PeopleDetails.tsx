@@ -1,15 +1,29 @@
-import { Dialog, List, ListItem } from '@material-ui/core';
-import './PeopleDetails.css'
-import { People } from './types'
+import { Dialog } from '@material-ui/core';
+import { DeleteOutlined as DeleteIcon } from '@material-ui/icons';
+import './PeopleDetails.css';
+import {getPeople, deletePeople} from './BackendController';
+import { People, User } from './types';
 
 type PeopleDetailsParamsType = {
     people: People;
+    timelineId: string;
+    setPeople: Function;
     open: boolean;
     onClose: any;
 }
 
 const PeopleDetails = (params: PeopleDetailsParamsType) => {
-    const {people, open, onClose} = params;
+    const {people, open, setPeople, onClose, timelineId} = params;
+
+    const onDeletePeople = async () => {
+        await deletePeople(people)
+        const peopleFirestore = await getPeople({
+            id: timelineId,
+            name: 'not-used',
+            userEmail: '',
+        });
+        await setPeople(peopleFirestore);
+    }
 
     return (
         <Dialog
@@ -38,6 +52,9 @@ const PeopleDetails = (params: PeopleDetailsParamsType) => {
                     {people.wikipedia ? <div style={{flex: '1 0 0', textAlign: 'left'}}><a href={people.wikipedia} target="_blank" rel="noopener noreferrer">Wikipedia</a></div>: <></>}
                     {people.wikiquote ? <div style={{flex: '1 0 0', textAlign: 'right'}}><a href={people.wikiquote} target="_blank" rel="noopener noreferrer">Wikiquote</a></div>: <></>}
                     </div>
+                </div>
+                <div>
+                    <DeleteIcon fontSize='large' onClick={()=> onDeletePeople()}/>
                 </div>
             </div>
         </div>

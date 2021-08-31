@@ -1,31 +1,31 @@
 import {useState} from 'react';
 import {Divider, Modal} from '@material-ui/core';
-import {signInPopup, disconnect} from './Authentication'
+import {signInPopup, disconnect} from './BackendController'
+import {User} from './types'
 import firebase from 'firebase';
 
 import './Header.css'
 
 type HeaderParams = {
-    // timelineList: TimelineList
+    user: User;
+    setUser: Function;
 }
 
 export default function Header(params : HeaderParams) {
-    const [currentUser, setCurrentUser] = useState<any>();
-    const [disconnectOpen, setDisconnectOpen] = useState<boolean>(false);
-    // const {timelineList} = params;
+    const {user, setUser} = params;
 
-    firebase.auth().onAuthStateChanged((user) => {
-        setCurrentUser(user)
-      });
+    const [disconnectOpen, setDisconnectOpen] = useState<boolean>(false);
+
+    firebase.auth().onAuthStateChanged(user => setUser(user));
 
     return (
         <div>
             <div className="Header">
                 <a href="/" style={{fontSize: '2rem'}}>TimelinesJS</a>
                 {
-                    currentUser ? 
+                    user ? 
                     <div style={{paddingRight: '10px'}}>
-                        <img onClick={() => setDisconnectOpen(true)} src={currentUser.photoURL} style={{ borderRadius: '50%', width: '80%' }}/>
+                        <img onClick={() => setDisconnectOpen(true)} src={user && user.photoURL ? user.photoURL:''} style={{ borderRadius: '50%', width: '80%' }}/>
                     </div>
                     :<button onClick={() => signInPopup()}>Sign in</button>
                 }

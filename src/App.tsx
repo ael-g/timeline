@@ -6,36 +6,24 @@ import {
 } from "react-router-dom";
 import {useState} from 'react'
 import Timeline from './Timeline';
-import Menu from './Menu';
 import Footer from './Footer';
 import Header from './Header';
 import TimelineListSelector from './TimelineListSelector'
-import {People, TimelineList, Category, Event} from './types';
-
+import {User} from './types'
 
 function App() {
-  const[people, setPeople] = useState<Array<People>>([]);
-  const[events, setEvents] = useState<Array<Event>>([]);
-  const[categories, setCategories] = useState<Array<Category>>([]);
-  const[timelineLists, setTimelineLists] = useState<Array<TimelineList>>([]);
+  const [user, setUser] = useState<User|null>(null);
 
   return (
   <Router basename={process.env.PUBLIC_URL}>
-      <Header/>
+      <Header user={user} setUser={setUser}/>
       <div className="App">
       <Switch>
         <Route path="/timelines/:timelineId">
-          <div className="Main">
-            <div>
-              <Menu setPeople={setPeople} setCategories={setCategories} setEvents={setEvents}/>
-            </div>
-            <div>
-              <Timeline people={people} categories={categories} events={events} setPeople={setPeople}/>
-            </div>
-          </div>
+          <Timeline user={user}/>
         </Route>
         <Route path="/">
-          <TimelineListSelector setTimelineLists={setTimelineLists} timelineLists={timelineLists}/>
+          <TimelineListSelector user={user}/>
         </Route>
       </Switch>
       </div>

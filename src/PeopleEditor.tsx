@@ -1,23 +1,23 @@
 import {useState, useRef} from 'react';
 import {Modal, List, Typography, ListItem, ListItemText, Divider} from '@material-ui/core';
-import {People, TimelineList} from './types'
-import db from './config/firebase';
-
 import {Search} from '@material-ui/icons';
+import {People} from './types';
+import db from './config/firebase';
+import {getPeople as getPeopleFirestore} from './BackendController'
+import {getPeople} from './Wikidata';
 
 import './PeopleEditor.css';
-import {getPeople as getPeopleFirestore} from './PeopleController'
-import {getPeople, getPeopleDetails} from './Wikidata';
 
 type PeopleEditorParamsType = {
     open: boolean;
     timelineId: string;
     setPeople: Function;
+    people: any[];
     onClose: any;
 }
 
 export default function PeopleEditor(params : PeopleEditorParamsType) {
-    const {open, onClose, timelineId, setPeople} = params;
+    const {open, onClose, timelineId, setPeople, people} = params;
     const [peopleLocal, setPeopleLocal] = useState<Array<People>>([])
 
     const previousSearch = useRef<AbortController>();
@@ -40,20 +40,20 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
         } catch (e) {
             // properly handle abortion
         }
-        
     }
 
     const onAddPeople = async (p: People) => {
-        const t = await db.collection('timelineLists').doc(timelineId).get();
-        let peopleAdd = {...p, timelineList: t.id}
-        await db.collection('people').add(peopleAdd);
-        
-        const people = await getPeopleFirestore({
-            id: timelineId,
-            name: 'not-used',
-            userEmail: '',
-        });
-        await setPeople(people);
+        let peopleAdd = {...p, timelineList: timelineId}
+
+        if (! people.map(pe => pe.name).includes(p.name)) {
+            await db.collection('people').add(peopleAdd);
+            const peopleFirestore = await getPeopleFirestore({
+                id: timelineId,
+                name: 'not-used',
+                userEmail: '',
+            });
+            await setPeople(peopleFirestore);
+        }
         onCloseInternal()
     }
 
@@ -66,7 +66,7 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
             <div className="PeopleEditor">
                 <List>
                     <div className="SearchBar">
-                    <Search/><input type="text" onChange={onSearch} autoFocus></input>
+                    <Search/><input placeholder="Search people..." type="text" onChange={onSearch} autoFocus></input>
                     </div>
                 </List>
                 {peopleLocal.length ? <Divider/>:<></>}

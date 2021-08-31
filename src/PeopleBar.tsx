@@ -1,5 +1,3 @@
-import {useState} from 'react';
-import EditIcon from '@material-ui/icons/Edit';
 import './PeopleBar.css';
 
 type PeopleBarParamsType = {
@@ -23,16 +21,8 @@ type PeopleDisplayType = {
 export default function PeopleBar(params : PeopleBarParamsType) {
     const {people, setPeopleSelected} = params;
 
-    const [displayDetails, setDisplayDetails] = useState<Boolean>(false)
-
     return (
-        <div
-            onMouseEnter={() => setDisplayDetails(true)} 
-            onMouseLeave={() => setDisplayDetails(false)}
-        >
-            {
-                // <Details open={displayDetails}/>
-            }
+        <div>
             <a  key={people.name}
                 onClick={() => setPeopleSelected(people)}
                 className="People" style={{width: `${people.width}%`, left: `${people.left}%`, "marginTop": `${people.marginTop}px`}}>
@@ -43,14 +33,6 @@ export default function PeopleBar(params : PeopleBarParamsType) {
                 </div>
                 <div className="Right">{people.deathDate}</div>
             </a>
-                {   displayDetails ? 
-                        <div 
-                        className="EditPeople"
-                        style={{ left: `${people.left + people.width + 1 }%`, "marginTop": `${people.marginTop}px`}}>
-                            <EditIcon/>
-                        </div>
-                    :<div></div>
-                }
         </div>
     )
 }

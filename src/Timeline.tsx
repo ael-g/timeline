@@ -2,22 +2,18 @@ import {useState, useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import {Add as AddIcon, Remove as RemoveIcon} from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
-import {People, Category, Event} from './types';
+import {People} from './types';
 import PeopleEditor from './PeopleEditor';
 import PeopleBar from './PeopleBar';
 import PeopleDetails from './PeopleDetails';
-import {getSignedInUserWithoutSignin} from './Authentication';
-import { TimelineList } from './types';
+import {getPeople} from './BackendController';
+import { TimelineList, User } from './types';
 import db from './config/firebase';
-
 
 import './Timeline.css'
 
 type TimelineParams = {
-  people: People[];
-  setPeople: Function;
-  categories: Category[];
-  events: Event[];
+  user: User;
 }
 
 type TimelineRouterParams = {
@@ -34,32 +30,18 @@ const makeDefaultPeople = () : People => {
   }
 }
 
-const expandPeople = (people: any) => {
-  return people
-  const ret = people.map( (p:any) => p['positionHeld'] ? p['positionHeld'].map( (q:any) => (
-  {
-    name: p.name,
-    description: q.value,
-    bornDate: q.start,
-    deathDate: q.end,
-  }) ).concat([p]) : p ).flat().sort((a:any, b:any) => {return a.name < b.name ? -1:1})
-  return ret
-}
-
 const units = [ 10, 25, 50, 100 ]
 
 function Timeline(params: TimelineParams) {
+  const { user } = params;
   const { timelineId } = useParams<TimelineRouterParams>();
-
-  const { people, setPeople } = params;
-
-  // const peopleExpanded = expandPeople(people)
+  const[people, setPeople] = useState<Array<People>>([]);
 
   const [peopleSelected, setPeopleSelected] = useState<People>(makeDefaultPeople())
+  const [timelineList, setTimelineList] = useState<TimelineList>()
+
   const [isOpenPeopleEditor, setIsOpenPeopleEditor] = useState<boolean>(false)
   const [isOpenPeopleDetails, setIsOpenPeopleDetails] = useState<boolean>(false)
-  const [isOwnTimeline, setIsOwnTimeline] = useState<boolean>(false)
-  console.log(isOwnTimeline)
 
   const [unit, setUnit] = useState<number>(25)
 
@@ -70,14 +52,22 @@ function Timeline(params: TimelineParams) {
 
   useEffect(() => {
     getIsOwnTimeline();
+    onRefreshPeople()
   }, []);
 
+  const onRefreshPeople = async () => {
+    const people = await getPeople({
+      id: timelineId,
+      name: 'not-used',
+      userEmail: ''
+    });
+    setPeople(people);
+  }
+
   const getIsOwnTimeline = async () => {
-      const user = await getSignedInUserWithoutSignin()
       const timeline = await db.collection('timelineLists').doc(timelineId).get();
       const t = {id: timeline.id, ...timeline.data()} as TimelineList
-      const iot = (user && user.email === t.userEmail) || false
-      setIsOwnTimeline(iot)
+      setTimelineList(t)
   }
 
   const getTimelineRange = (items :People[]) => {  
@@ -147,7 +137,6 @@ function Timeline(params: TimelineParams) {
   const {min, max} = getTimelineRange(people);
   const centuries = computeCenturies(min, max);
   const peopleComputed = computePeople(people, min, max);
-  // const height = computeHeight(peopleComputed);
   const s = {min, max, centuries, periods:[], people: peopleComputed};
 
   const onChangeUnit = (val:number) => {
@@ -156,6 +145,8 @@ function Timeline(params: TimelineParams) {
       setUnit(units[i])
     }
   }
+
+  const isOwnTimeline = (user && timelineList && user.email === timelineList.userEmail) || false
 
   return (
     <div className="Timeline">
@@ -178,10 +169,10 @@ function Timeline(params: TimelineParams) {
         )
       }
       {
-        <PeopleEditor timelineId={timelineId} setPeople={setPeople} open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)}/>
+        <PeopleEditor timelineId={timelineId} setPeople={setPeople} people={people} open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)}/>
       }
       {
-        <PeopleDetails open={isOpenPeopleDetails} onClose={() => setIsOpenPeopleDetails(false)} people={peopleSelected}/>
+        <PeopleDetails timelineId={timelineId} open={isOpenPeopleDetails} setPeople={setPeople} onClose={() => setIsOpenPeopleDetails(false)} people={peopleSelected}/>
       }
       {
         <div style={{display: 'flex', flexDirection: 'column'}}>

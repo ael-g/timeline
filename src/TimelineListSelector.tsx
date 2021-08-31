@@ -1,38 +1,26 @@
 import { List, ListItem, ListItemText, Divider, Typography } from "@material-ui/core";
 import {useEffect, useState} from 'react'
-import firebase from 'firebase'
 import {Search, HighlightOff as Delete} from '@material-ui/icons';
-import db from './config/firebase';
-import {getSignedInUser, getSignedInUserWithoutSignin} from './Authentication'
-import {TimelineList} from './types';
+import {getSignedInUser, getTimelineLists, addTimelineList, deleteTimelineList} from './BackendController'
+import {TimelineList, User} from './types';
 import './TimelineListSelector.css';
 
 type TimelineListSelectorParams = {
-    timelineLists: TimelineList[];
-    setTimelineLists: Function;
+    user: User;
 }
-
+  
 export default function TimelineListSelector(params: TimelineListSelectorParams) {
-    const {timelineLists, setTimelineLists} = params;
+    const { user } = params;
     const [userSearch, setUserSearch] = useState<string>()
-    const [userSignedIn, setUserSignedIn] = useState<firebase.User>()
+    const [timelineLists, setTimelineLists] = useState<Array<TimelineList>>([]);
     const [displayedTimelineLists, setDisplayedTimelineLists] = useState<Array<TimelineList>>(timelineLists)
 
     useEffect(() => {
-        getTimelineLists();
-        getUser();
+        init();
     }, []);
 
-    const getUser = async () => {
-        const user = await getSignedInUserWithoutSignin()
-        if(user) {
-            setUserSignedIn(user)
-        }
-    }
-
-    const getTimelineLists = async () => {
-        const col = await db.collection('timelineLists').orderBy('name').get();
-        const timelineLists = col.docs.map(p => {return {id: p.id, ...p.data()} as TimelineList})
+    const init = async () => {
+        const timelineLists = await getTimelineLists();
         setTimelineLists(timelineLists);
         setDisplayedTimelineLists(timelineLists);
     }
@@ -59,7 +47,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
                     name: userSearch,
                     userEmail,
                 }
-                const ret = await db.collection('timelineLists').add(t);
+                const ret = await addTimelineList(t)
                 window.location.assign(`${process.env.PUBLIC_URL}/timelines/${ret.id}`);
             }
         }
@@ -78,15 +66,14 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
     }
 
     const deleteTimeline = async (id: string) => {
-        // TODO: delete associated people
-        await db.collection('timelineLists').doc(id).delete();
+        await deleteTimelineList(id);
         window.location.assign(`${process.env.PUBLIC_URL}`);   
     }
 
     const TimelineBar = (params: any) => {
         const [displayDeleteIcon, setDisplayDeleteIcon] = useState<Boolean>(false);
         const { timeline } = params;
-        const isOwnTimeline = (userSignedIn && userSignedIn.email === timeline.userEmail) || false
+        const isOwnTimeline = (user && user.email === timeline.userEmail) || false
 
         return (
         <ListItem 
@@ -107,7 +94,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
                                 flex: '10 0 0'
                             }}
                             >
-                            {timeline.name} - {timeline.userEmail}
+                            {timeline.name}
                         </Typography>
                         {
                             isOwnTimeline ? <div style={{
@@ -129,7 +116,8 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
             <div className="TimelineListSelector">
                 <List>
                     <div className="SearchBar">
-                    <Search/><input type="text" onChange={onSearch} autoFocus></input>
+                        <Search/>
+                        <input placeholder="Type something find a timeline or create a new one..." type="text" onChange={onSearch} autoFocus></input>
                     </div>
                     <Divider/>
                     {

@@ -1,3 +1,5 @@
+import firebase from 'firebase'
+
 type People = {
     id: string;
     qid?: string;
@@ -9,6 +11,8 @@ type People = {
     wikipedia?: string;
     wikiquote?: string;
 };
+
+type User = firebase.User|null
 
 type TimelineList = {
     id: string;
@@ -37,4 +41,4 @@ type GenericTimelineObject = {
     left?: number;
 }
 
-export type {People, GenericTimelineObject, TimelineList, Category, Event};
+export type {People, GenericTimelineObject, TimelineList, Category, Event, User};
