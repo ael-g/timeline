@@ -10,6 +10,7 @@ type People = {
     description?: string;
     wikipedia?: string;
     wikiquote?: string;
+    timelineList?: string;
 };
 
 type User = firebase.User|null

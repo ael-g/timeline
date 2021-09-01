@@ -35,7 +35,7 @@ export default function Header(params : HeaderParams) {
                         onClose={() => setDisconnectOpen(false)}
                     >{<div style={{
                             display: 'flex',
-                            marginTop: '60px',
+                            margin: '10% 40%',
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',

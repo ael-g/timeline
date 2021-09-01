@@ -127,7 +127,8 @@ function Timeline(params: TimelineParams) {
         picture: item.picture, 
         description: item.description,
         wikipedia: item.wikipedia, 
-        wikiquote: item.wikiquote, 
+        wikiquote: item.wikiquote,
+        timelineList: item.timelineList,
         marginTop})
     }
 
@@ -172,7 +173,7 @@ function Timeline(params: TimelineParams) {
         <PeopleEditor timelineId={timelineId} setPeople={setPeople} people={people} open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)}/>
       }
       {
-        <PeopleDetails timelineId={timelineId} open={isOpenPeopleDetails} setPeople={setPeople} onClose={() => setIsOpenPeopleDetails(false)} people={peopleSelected}/>
+        <PeopleDetails timelineId={timelineId} open={isOpenPeopleDetails} setPeople={setPeople} setIsOpen={setIsOpenPeopleDetails} people={peopleSelected}/>
       }
       {
         <div style={{display: 'flex', flexDirection: 'column'}}>

@@ -117,7 +117,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
                 <List>
                     <div className="SearchBar">
                         <Search/>
-                        <input placeholder="Type something find a timeline or create a new one..." type="text" onChange={onSearch} autoFocus></input>
+                        <input placeholder="Type something to find a timeline or create a new one..." type="text" onChange={onSearch} autoFocus></input>
                     </div>
                     <Divider/>
                     {

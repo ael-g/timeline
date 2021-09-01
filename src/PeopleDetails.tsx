@@ -9,13 +9,14 @@ type PeopleDetailsParamsType = {
     timelineId: string;
     setPeople: Function;
     open: boolean;
-    onClose: any;
+    setIsOpen: any;
 }
 
 const PeopleDetails = (params: PeopleDetailsParamsType) => {
-    const {people, open, setPeople, onClose, timelineId} = params;
+    const {people, open, setPeople, setIsOpen, timelineId} = params;
 
     const onDeletePeople = async () => {
+        console.log(people)
         await deletePeople(people)
         const peopleFirestore = await getPeople({
             id: timelineId,
@@ -23,12 +24,13 @@ const PeopleDetails = (params: PeopleDetailsParamsType) => {
             userEmail: '',
         });
         await setPeople(peopleFirestore);
+        setIsOpen(false);
     }
 
     return (
         <Dialog
             open={open}
-            onClose={onClose}
+            onClose={() => setIsOpen(false)}
             PaperProps={{
                 style: {
                     width: '60%'
