@@ -3,6 +3,7 @@ import {Modal, List, Typography, ListItem, ListItemText, Divider} from '@materia
 import {Search} from '@material-ui/icons';
 import {People} from './types';
 import db from './config/firebase';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {getPeople as getPeopleFirestore} from './BackendController'
 import {getPeople} from './Wikidata';
 
@@ -19,6 +20,7 @@ type PeopleEditorParamsType = {
 export default function PeopleEditor(params : PeopleEditorParamsType) {
     const {open, onClose, timelineId, setPeople, people} = params;
     const [peopleLocal, setPeopleLocal] = useState<Array<People>>([])
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const previousSearch = useRef<AbortController>();
 
@@ -28,6 +30,7 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
     }
 
     const onSearch = async (e: any) => {
+        setIsLoading(true)
         if (previousSearch.current) {
             previousSearch.current.abort();
         }
@@ -37,6 +40,7 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
         try {
             const people = await getPeople(e.target.value, controller.signal)
             setPeopleLocal(people)
+            setIsLoading(false)
         } catch (e) {
             // properly handle abortion
         }
@@ -66,7 +70,10 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
             <div className="PeopleEditor">
                 <List>
                     <div className="SearchBar">
-                    <Search/><input placeholder="Search people..." type="text" onChange={onSearch} autoFocus></input>
+                    { isLoading ? 
+                        <CircularProgress style={{color: 'grey'}}/>:<Search/>
+                    }
+                    <input placeholder="Search people..." type="text" onChange={onSearch} autoFocus></input>
                     </div>
                 </List>
                 {peopleLocal.length ? <Divider/>:<></>}

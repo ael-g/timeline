@@ -25,9 +25,20 @@
   font-size: 1.2rem;
 }
 
-
 input, button { border:none; } 
 
 input:focus {
   outline: none;
+}
+
+@media (max-width: 1024px)  {
+  input {
+    width: 200px;
+  }
+}
+
+@media (min-width: 1024px)  {
+  input {
+    width: 400px;
+  }
 }

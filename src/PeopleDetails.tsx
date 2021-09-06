@@ -2,7 +2,7 @@ import { Dialog } from '@material-ui/core';
 import { DeleteOutlined as DeleteIcon } from '@material-ui/icons';
 import './PeopleDetails.css';
 import {getPeople, deletePeople} from './BackendController';
-import { People, User } from './types';
+import { People } from './types';
 
 type PeopleDetailsParamsType = {
     people: People;
@@ -10,10 +10,11 @@ type PeopleDetailsParamsType = {
     setPeople: Function;
     open: boolean;
     setIsOpen: any;
+    isOwnTimeline: boolean;
 }
 
 const PeopleDetails = (params: PeopleDetailsParamsType) => {
-    const {people, open, setPeople, setIsOpen, timelineId} = params;
+    const {people, open, setPeople, setIsOpen, timelineId, isOwnTimeline} = params;
 
     const onDeletePeople = async () => {
         console.log(people)
@@ -56,7 +57,7 @@ const PeopleDetails = (params: PeopleDetailsParamsType) => {
                     </div>
                 </div>
                 <div>
-                    <DeleteIcon fontSize='large' onClick={()=> onDeletePeople()}/>
+                    <DeleteIcon style={{visibility: isOwnTimeline? 'visible':'hidden'}}fontSize='large' onClick={()=> onDeletePeople()}/>
                 </div>
             </div>
         </div>

@@ -12,6 +12,12 @@ const getTimelineList = async (id: string) => {
     return await db.collection('timelineLists').doc(id).get();
 }
 
+const updateTimelineList = async (t: TimelineList, name: string) => {
+    return await db.collection('timelineLists').doc(t.id).update({
+        name
+    });
+}
+
 const addTimelineList = async (t: any) => {
     return await db.collection('timelineLists').add(t);
 }
@@ -63,6 +69,7 @@ export {
     getTimelineLists,
     getTimelineList,
     addTimelineList,
+    updateTimelineList,
     deleteTimelineList,
     getSignedInUserWithoutSignin,
 };

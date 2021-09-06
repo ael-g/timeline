@@ -1,6 +1,7 @@
 import { List, ListItem, ListItemText, Divider, Typography } from "@material-ui/core";
 import {useEffect, useState} from 'react'
 import {Search, HighlightOff as Delete} from '@material-ui/icons';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {getSignedInUser, getTimelineLists, addTimelineList, deleteTimelineList} from './BackendController'
 import {TimelineList, User} from './types';
 import './TimelineListSelector.css';
@@ -12,6 +13,7 @@ type TimelineListSelectorParams = {
 export default function TimelineListSelector(params: TimelineListSelectorParams) {
     const { user } = params;
     const [userSearch, setUserSearch] = useState<string>()
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const [timelineLists, setTimelineLists] = useState<Array<TimelineList>>([]);
     const [displayedTimelineLists, setDisplayedTimelineLists] = useState<Array<TimelineList>>(timelineLists)
 
@@ -23,6 +25,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
         const timelineLists = await getTimelineLists();
         setTimelineLists(timelineLists);
         setDisplayedTimelineLists(timelineLists);
+        setIsLoading(false)
     }
 
     const onSelectTimeList = (e: TimelineList) => {
@@ -78,6 +81,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
         return (
         <ListItem 
             id={timeline.name}
+            onClick={() => onSelectTimeList(timeline)}
             onMouseEnter={() => setDisplayDeleteIcon(isOwnTimeline)} 
             onMouseLeave={() => setDisplayDeleteIcon(false)}
             button 
@@ -87,7 +91,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
                  primary={
                 <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                     <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                        <Typography onClick={() => onSelectTimeList(timeline)} 
+                        <Typography 
                             key={timeline.name} 
                             style={{
                                 fontSize: "1.5rem", 
@@ -116,7 +120,9 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
             <div className="TimelineListSelector">
                 <List>
                     <div className="SearchBar">
-                        <Search/>
+                        { isLoading ? <CircularProgress style={{color:'grey'}}/>:
+                            <Search/>
+                        }
                         <input placeholder="Type something to find a timeline or create a new one..." type="text" onChange={onSearch} autoFocus></input>
                     </div>
                     <Divider/>

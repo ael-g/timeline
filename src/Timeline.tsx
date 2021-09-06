@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import {useParams} from "react-router-dom";
-import {Add as AddIcon, Remove as RemoveIcon} from '@material-ui/icons';
+import {Add as AddIcon, LeakRemoveTwoTone, Remove as RemoveIcon} from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
 import {People} from './types';
 import PeopleEditor from './PeopleEditor';
@@ -14,6 +14,8 @@ import './Timeline.css'
 
 type TimelineParams = {
   user: User;
+  timelineList: TimelineList|null;
+  setTimelineList: Function;
 }
 
 type TimelineRouterParams = {
@@ -33,12 +35,11 @@ const makeDefaultPeople = () : People => {
 const units = [ 10, 25, 50, 100 ]
 
 function Timeline(params: TimelineParams) {
-  const { user } = params;
+  const { user, timelineList, setTimelineList } = params;
   const { timelineId } = useParams<TimelineRouterParams>();
   const[people, setPeople] = useState<Array<People>>([]);
 
   const [peopleSelected, setPeopleSelected] = useState<People>(makeDefaultPeople())
-  const [timelineList, setTimelineList] = useState<TimelineList>()
 
   const [isOpenPeopleEditor, setIsOpenPeopleEditor] = useState<boolean>(false)
   const [isOpenPeopleDetails, setIsOpenPeopleDetails] = useState<boolean>(false)
@@ -135,10 +136,38 @@ function Timeline(params: TimelineParams) {
     return people
   }
 
+  const computeColumns = (people :any) => {
+    const peopleOrdered = people.sort((a:any, b:any) => {return a.deathDate < b.deathDate ? -1:1})
+    const columns : any[] = [];
+
+    for(const p of peopleOrdered) {
+      let foundAPlace = false
+      for(let col of columns) {
+        if(col.length && p.bornDate < col[0].deathDate) {
+          console.log(`found a place for ${p.name}`)
+          col.push(p)
+          console.log(`index of ${columns.indexOf(col)}`)
+          columns.splice(columns.indexOf(col), 1, col);
+          foundAPlace = true
+          break
+        }
+      }
+
+      if(! foundAPlace) {
+        console.log(`Ok so creating a column for ${p.name}`)
+        columns.push([p])
+      }
+    }
+
+    return columns
+  }
+
   const {min, max} = getTimelineRange(people);
   const centuries = computeCenturies(min, max);
   const peopleComputed = computePeople(people, min, max);
-  const s = {min, max, centuries, periods:[], people: peopleComputed};
+  const columns = computeColumns(peopleComputed);
+  const s = {min, max, centuries, people: peopleComputed};
+  const marginTopMax = 100 + peopleComputed.reduce((acc, val) => val.marginTop > acc ? val.marginTop:acc, -10000)
 
   const onChangeUnit = (val:number) => {
     const i = units.indexOf(unit) + val
@@ -173,13 +202,20 @@ function Timeline(params: TimelineParams) {
         <PeopleEditor timelineId={timelineId} setPeople={setPeople} people={people} open={isOpenPeopleEditor} onClose={() => setIsOpenPeopleEditor(false)}/>
       }
       {
-        <PeopleDetails timelineId={timelineId} open={isOpenPeopleDetails} setPeople={setPeople} setIsOpen={setIsOpenPeopleDetails} people={peopleSelected}/>
+        <PeopleDetails timelineId={timelineId} isOwnTimeline={isOwnTimeline} open={isOpenPeopleDetails} setPeople={setPeople} setIsOpen={setIsOpenPeopleDetails} people={peopleSelected}/>
       }
       {
-        <div style={{display: 'flex', flexDirection: 'column'}}>
-          {
-            s.people.map(i => <PeopleBar people={i} setPeopleSelected={setPeopleSelectedLocal}/>)
-          }
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+        {
+          columns.map(col =>
+            <div style={{display: 'flex', flexDirection:'column'}}>
+              {
+                col.map((i:any) => <PeopleBar people={i} setPeopleSelected={setPeopleSelectedLocal}/>)
+              }
+            </div>
+          )
+        }
+          <div style={{marginTop: `${marginTopMax}px`}}></div>
         </div>
       }
     </div>
