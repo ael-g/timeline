@@ -11,14 +11,17 @@ type HeaderParams = {
     user: User;
     timelineList: TimelineList|null;
     setUser: Function;
+    setTimelineList: Function;
 }
 
 export default function Header(params : HeaderParams) {
-    const {user, setUser, timelineList} = params;
+    const {user, setUser, timelineList, setTimelineList} = params;
 
     const [disconnectOpen, setDisconnectOpen] = useState<boolean>(false);
     const [displaySaveTimelineName, setDisplaySaveTimelineName] = useState<boolean>(false);
     const [outlineInput, setOutlineInput] = useState<boolean>(false);
+    const [isSavingName, setIsSavingName] = useState<string>();
+
 
     const timelineNameInput = createRef<HTMLInputElement>();
     const isOwnTimeline = (user && timelineList && user.email === timelineList.userEmail) || false
@@ -38,17 +41,27 @@ export default function Header(params : HeaderParams) {
     
     const onSaveTimelineName = async () => {
         if(timelineNameInput && timelineNameInput.current && timelineList) {
-            await updateTimelineList(timelineList, timelineNameInput.current.value)
+            const name = timelineNameInput.current.value;
+            setIsSavingName(name)
+            await updateTimelineList(timelineList, name)
+            setTimelineList({
+                id: timelineList.id,
+                name
+            })
+            // timelineNameInput.current.value = name;
         }
         setDisplaySaveTimelineName(false)
     }
 
     const onBlurInput = (e:any) => {
-        if(timelineList) {
-            e.target.value = timelineList.name;
-        }
-        setOutlineInput(false)
-        setDisplaySaveTimelineName(false)
+        setTimeout(() => {
+            if(timelineList && !isSavingName) {
+                e.target.value = timelineList.name;
+            }
+            setOutlineInput(false)
+            setDisplaySaveTimelineName(false)
+            setIsSavingName('')
+        }, 500)
     }
 
     return (

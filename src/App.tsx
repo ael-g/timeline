@@ -18,7 +18,7 @@ function App() {
 
   return (
   <Router basename={process.env.PUBLIC_URL}>
-      <Header user={user} setUser={setUser} timelineList={timelineList}/>
+      <Header user={user} setUser={setUser} timelineList={timelineList} setTimelineList={setTimelineList}/>
       <div className="App">
       <Switch>
         <Route path="/timelines/:timelineId">

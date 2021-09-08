@@ -15,7 +15,7 @@
 }
 
 .People {
-    position: absolute;
+    position: fixed;
     display: flex;
     max-height: 50px;
     overflow: hidden;

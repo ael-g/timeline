@@ -22,18 +22,16 @@ export default function PeopleBar(params : PeopleBarParamsType) {
     const {people, setPeopleSelected} = params;
 
     return (
-        <div>
-            <a  key={people.name}
-                onClick={() => setPeopleSelected(people)}
-                className="People" style={{width: `${people.width}%`, left: `${people.left}%`, "marginTop": `${people.marginTop}px`}}>
-                <div className="Left">{people.bornDate}</div>
-                <div className="Centered">
-                    <div style={{fontWeight: "bold"}}>{people.name}</div>
-                    <div style={{fontSize: 'small'}}>{people.description}</div>
-                </div>
-                <div className="Right">{people.deathDate}</div>
-            </a>
-        </div>
+        <a  key={people.name}
+            onClick={() => setPeopleSelected(people)}
+            className="People" style={{width: `${people.width}%`, left: `${people.left}%`, "marginTop": `${people.marginTop}px`}}>
+            <div className="Left">{people.bornDate}</div>
+            <div className="Centered">
+                <div style={{fontWeight: "bold"}}>{people.name}</div>
+                <div style={{fontSize: 'small'}}>{people.description}</div>
+            </div>
+            <div className="Right">{people.deathDate}</div>
+        </a>
     )
 }
 

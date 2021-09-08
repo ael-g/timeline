@@ -144,9 +144,7 @@ function Timeline(params: TimelineParams) {
       let foundAPlace = false
       for(let col of columns) {
         if(col.length && p.bornDate < col[0].deathDate) {
-          console.log(`found a place for ${p.name}`)
           col.push(p)
-          console.log(`index of ${columns.indexOf(col)}`)
           columns.splice(columns.indexOf(col), 1, col);
           foundAPlace = true
           break
@@ -154,7 +152,6 @@ function Timeline(params: TimelineParams) {
       }
 
       if(! foundAPlace) {
-        console.log(`Ok so creating a column for ${p.name}`)
         columns.push([p])
       }
     }
@@ -194,8 +191,8 @@ function Timeline(params: TimelineParams) {
         </div> : <></>
       }
       {
-        s.centuries.map(c => 
-          <a key={c.year} className="Centuries" style={{width: `${c.width}%`, left: `${c.left}%`, height: `100%`}}>{c.year}</a>
+        s.centuries.map(
+          c => <a key={c.year} className="Centuries" style={{width: `${c.width}%`, left: `${c.left}%`, height: `100%`}}>{c.year}</a>
         )
       }
       {
