@@ -89,7 +89,7 @@ export default function Header(params : HeaderParams) {
                             }}
                             defaultValue={timelineList.name}
                         />
-                        <button 
+                        <button
                             onClick={onSaveTimelineName} 
                             style={{
                                 visibility: displaySaveTimelineName? 'visible':'hidden',
@@ -114,20 +114,15 @@ export default function Header(params : HeaderParams) {
                     <Modal
                         open={disconnectOpen}
                         onClose={() => setDisconnectOpen(false)}
-                    >{<div style={{
-                            display: 'flex',
-                            margin: '10% 40%',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: 'white'
-                        }}>
-                        <div>Do you want to disconnect?</div>
-                        <button onClick={() => {disconnect(); setDisconnectOpen(false)}}>Yes</button>
-                    </div>
-                    }</Modal>
-                }
-                
+                    >
+                        <div style={{right: '0px', top: '60px', position: 'fixed'}}>
+                            <button style={{fontSize: 'large'}}
+                                onClick={() => {disconnect(); setDisconnectOpen(false)}}>
+                                Disconnect
+                            </button>
+                        </div>
+                    </Modal>
+                } 
             </div>
             <Divider/>
         </div>
