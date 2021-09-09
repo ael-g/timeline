@@ -1,25 +1,23 @@
 .Header {
   color: #666;
   position: fixed;
+  padding-left: 10px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
   z-index: 2;
   top: 0;
-  width: 100%;
+  width: 100vw;
   font-weight: bold;
   background-color: #f0f0e9;
+  justify-content: space-between;
 }
 
 .Header a {
-  padding: 10px;
   text-decoration: none;
   color: #666;
 }
 
 .Header button {
-  padding: 10px;
   text-decoration: none;
   color: #666;
   font-size: 1.2rem;
@@ -29,16 +27,4 @@ input, button { border:none; }
 
 input:focus {
   outline: none;
-}
-
-@media (max-width: 1024px)  {
-  input {
-    width: 200px;
-  }
-}
-
-@media (min-width: 1024px)  {
-  input {
-    width: 400px;
-  }
 }

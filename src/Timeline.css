@@ -1,5 +1,6 @@
 .Timeline {
-  margin-top: 55px;
+  top: 60px;
+  position: absolute;
 }
 
 .Zoom {

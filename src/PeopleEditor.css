@@ -18,11 +18,11 @@
   /* height: 40px; */
 }
 
-img {
+.PeopleEditor img {
   max-width: 60px;
 }
 
-input {
+.PeopleEditor input {
   padding-left: 10px;
   color: grey;
   border: none;

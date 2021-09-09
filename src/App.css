@@ -1,6 +1,5 @@
 .App {
   display: flex;
-  min-width: 600px;
   flex-direction: column;
 }
 

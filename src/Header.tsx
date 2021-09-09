@@ -6,6 +6,7 @@ import {User, TimelineList} from './types'
 import firebase from 'firebase';
 
 import './Header.css'
+import { grey } from '@material-ui/core/colors';
 
 type HeaderParams = {
     user: User;
@@ -65,66 +66,71 @@ export default function Header(params : HeaderParams) {
     }
 
     return (
-        <div>
-            <div className="Header">
-                <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', flex: '10'}}>
-                <a href="/" style={{fontSize: '2rem'}}>TimelinesJS</a>
-                {
-                    timelineList ?
-                    <div style={{display:'flex', flexDirection: 'row', justifyContent: 'center', flex: '10'}}>
-                        <input
-                            type="text"
-                            readOnly={!isOwnTimeline}
-                            ref={timelineNameInput}
-                            onChange={onChangeTimelineName}
-                            onFocus={() => setOutlineInput(true)}
-                            onBlur={onBlurInput}
-                            style={{
-                                fontSize: '1.8rem',
-                                // width: '400px',
-                                background: '#f0f0e9',
-                                textAlign: 'center',
-                                boxShadow: outlineInput ?'0 0 0 1pt grey':'',
-                                borderRadius: '2pt',
-                            }}
-                            defaultValue={timelineList.name}
-                        />
-                        <button
-                            onClick={onSaveTimelineName} 
-                            style={{
-                                visibility: displaySaveTimelineName? 'visible':'hidden',
-                                opacity: displaySaveTimelineName? '1':'0',
-                                transition: 'visibility 0s linear 200ms, opacity 200ms',
-                                marginLeft: '15px',
-                            }}
-                        >
-                            <SaveIcon/>
-                        </button>
-                    </div>:<></>
-                }
-                </div>
-                {
-                    user ? 
-                    <div style={{paddingRight: '10px'}}>
-                        <img onClick={() => setDisconnectOpen(true)} src={user && user.photoURL ? user.photoURL:''} style={{ borderRadius: '50%', width: '80%' }}/>
-                    </div>
+        <div className="Header">
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'row', 
+                flexWrap: 'wrap'
+            }}>
+            <a href="/" style={{fontSize: '1.5rem', paddingRight: '10px'}}>TimelinesJS</a>
+            {
+                timelineList ?
+                <div style={{display: 'flex'}}>
+                    <input
+                        type="text"
+                        readOnly={!isOwnTimeline}
+                        ref={timelineNameInput}
+                        onChange={onChangeTimelineName}
+                        onFocus={() => setOutlineInput(true)}
+                        onBlur={onBlurInput}
+                        style={{
+                            fontSize: '1.7rem',
+                            color: 'grey',
+                            width: '260px',
+                            background: '#f0f0e9',
+                            boxShadow: outlineInput ?'0 0 0 1pt grey':'',
+                            borderRadius: '2pt',
+                            marginRight: '10px',
+                        }}
+                        defaultValue={timelineList.name}
+                    />
+                    <button
+                        onClick={onSaveTimelineName} 
+                        style={{
+                            visibility: displaySaveTimelineName? 'visible':'hidden',
+                            opacity: displaySaveTimelineName? '1':'0',
+                            transition: 'visibility 0s linear 200ms, opacity 200ms',
+                        }}
+                    >
+                        <SaveIcon/>
+                    </button>
+                </div>:<></>
+            }
+            </div>
+            <div style={{paddingRight: '20px'}}>
+            {
+                user ? 
+                    <img 
+                        onClick={() => setDisconnectOpen(true)} src={user && user.photoURL ? user.photoURL:''} 
+                        style={{ borderRadius: '50%', maxWidth: '55px'}}
+                    />
                     :<button onClick={() => signInPopup()}>Sign in</button>
                 }
-                {
-                    <Modal
-                        open={disconnectOpen}
-                        onClose={() => setDisconnectOpen(false)}
-                    >
-                        <div style={{right: '0px', top: '60px', position: 'fixed'}}>
-                            <button style={{fontSize: 'large'}}
-                                onClick={() => {disconnect(); setDisconnectOpen(false)}}>
-                                Disconnect
-                            </button>
-                        </div>
-                    </Modal>
-                } 
             </div>
-            <Divider/>
+            {
+                <Modal
+                    open={disconnectOpen}
+                    onClose={() => setDisconnectOpen(false)}
+                >
+                    <div style={{right: '0px', top: '60px', position: 'fixed'}}>
+                        <button style={{fontSize: 'large'}}
+                            onClick={() => {disconnect(); setDisconnectOpen(false)}}>
+                            Disconnect
+                        </button>
+                    </div>
+                </Modal>
+            } 
         </div>
     )
 }

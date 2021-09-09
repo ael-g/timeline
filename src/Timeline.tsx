@@ -190,6 +190,7 @@ function Timeline(params: TimelineParams) {
           <AddIcon onClick={() => setIsOpenPeopleEditor(true)}/>
         </div> : <></>
       }
+      <div>
       {
         s.centuries.map(
           c => <a key={c.year} className="Centuries" style={{width: `${c.width}%`, left: `${c.left}%`, height: `100%`}}>{c.year}</a>
@@ -215,6 +216,7 @@ function Timeline(params: TimelineParams) {
           <div style={{marginTop: `${marginTopMax}px`}}></div>
         </div>
       }
+      </div>
     </div>
   );
 }
