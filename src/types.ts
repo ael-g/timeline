@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import firebase from 'firebase';
 
 type People = {
     id: string;
@@ -42,4 +42,6 @@ type GenericTimelineObject = {
     left?: number;
 }
 
-export type {People, GenericTimelineObject, TimelineList, Category, Event, User};
+export type {
+  People, GenericTimelineObject, TimelineList, Category, Event, User,
+};

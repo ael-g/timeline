@@ -1,3 +1,5 @@
+import React from 'react';
+
 import './PeopleBar.css';
 
 type PeopleBarParamsType = {
@@ -17,21 +19,22 @@ type PeopleDisplayType = {
     description?: string;
 }
 
-
 export default function PeopleBar(params : PeopleBarParamsType) {
-    const {people, setPeopleSelected} = params;
+  const { people, setPeopleSelected } = params;
 
-    return (
-        <a  key={people.name}
-            onClick={() => setPeopleSelected(people)}
-            className="People" style={{width: `${people.width}%`, left: `${people.left}%`, "marginTop": `${people.marginTop}px`}}>
-            <div className="Left">{people.bornDate}</div>
-            <div className="Centered">
-                <div style={{fontWeight: "bold"}}>{people.name}</div>
-                <div style={{fontSize: '0.8rem'}}>{people.description}</div>
-            </div>
-            <div className="Right">{people.deathDate}</div>
-        </a>
-    )
+  return (
+    <div
+      key={people.name}
+      onClick={() => setPeopleSelected(people)}
+      className="People"
+      style={{ width: `${people.width}%`, left: `${people.left}%`, marginTop: `${people.marginTop}px` }}
+    >
+      <div className="Left">{people.bornDate}</div>
+      <div className="Centered">
+        <div style={{ fontWeight: 'bold' }}>{people.name}</div>
+        <div style={{ fontSize: '0.8rem' }}>{people.description}</div>
+      </div>
+      <div className="Right">{people.deathDate}</div>
+    </div>
+  );
 }
-

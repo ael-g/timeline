@@ -26,6 +26,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "lint": "./node_modules/.bin/eslint src --ext .tsx,.ts --fix",
     "getData": "ts-node -P tsconfig-tsnode.json migration/getCollections.ts",
     "pushData": "ts-node -P tsconfig-tsnode.json migration/pushCollections.ts",
     "build": "react-scripts build",
