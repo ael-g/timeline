@@ -21,12 +21,13 @@ export default function Header(params : HeaderParams) {
     const [disconnectOpen, setDisconnectOpen] = useState<boolean>(false);
     const [displaySaveTimelineName, setDisplaySaveTimelineName] = useState<boolean>(false);
     const [outlineInput, setOutlineInput] = useState<boolean>(false);
-    const [isSavingName, setIsSavingName] = useState<string>();
+    // const [isSavingName, setIsSavingName] = useState<string>();
 
 
     const timelineNameInput = createRef<HTMLInputElement>();
     const isOwnTimeline = (user && timelineList && user.email === timelineList.userEmail) || false
 
+    let isSavingName = false;
 
     firebase.auth().onAuthStateChanged(user => setUser(user));
 
@@ -43,12 +44,12 @@ export default function Header(params : HeaderParams) {
     const onSaveTimelineName = async () => {
         if(timelineNameInput && timelineNameInput.current && timelineList) {
             const name = timelineNameInput.current.value;
-            setIsSavingName(name)
+            isSavingName = true
             await updateTimelineList(timelineList, name)
-            setTimelineList({
-                id: timelineList.id,
-                name
-            })
+            // setTimelineList({
+            //     id: timelineList.id,
+            //     name
+            // })
             // timelineNameInput.current.value = name;
         }
         setDisplaySaveTimelineName(false)
@@ -61,7 +62,6 @@ export default function Header(params : HeaderParams) {
             }
             setOutlineInput(false)
             setDisplaySaveTimelineName(false)
-            setIsSavingName('')
         }, 500)
     }
 
@@ -73,7 +73,7 @@ export default function Header(params : HeaderParams) {
                 flexDirection: 'row', 
                 flexWrap: 'wrap'
             }}>
-            <a href="/" style={{fontSize: '1.5rem', paddingRight: '10px'}}>TimelinesJS</a>
+            <a href="/" style={{fontSize: '1.5rem', paddingRight: '30px'}}>TimelinesJS</a>
             {
                 timelineList ?
                 <div style={{display: 'flex'}}>
@@ -108,7 +108,7 @@ export default function Header(params : HeaderParams) {
                 </div>:<></>
             }
             </div>
-            <div style={{paddingRight: '20px'}}>
+            <div style={{paddingRight: '20px', display: 'flex', alignItems: 'center'}}>
             {
                 user ? 
                     <img 

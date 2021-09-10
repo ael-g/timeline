@@ -1,6 +1,7 @@
 .Header {
   color: #666;
   position: fixed;
+  min-height: 58px;
   padding-left: 10px;
   display: flex;
   flex-direction: row;
