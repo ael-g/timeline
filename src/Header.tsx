@@ -1,7 +1,8 @@
 import React, { useState, createRef } from 'react';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import { Modal } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
-import firebase from 'firebase';
 import { signInPopup, disconnect, updateTimelineList } from './BackendController';
 import { User, TimelineList } from './types';
 

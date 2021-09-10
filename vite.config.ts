@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import reactRefresh from '@vitejs/plugin-react-refresh'
 import compress from 'vite-plugin-compress'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,5 +11,5 @@ export default defineConfig({
     outDir: 'build',
     chunkSizeWarningLimit: 2000,
   },
-  plugins: [reactRefresh(), compress()],
+  plugins: [reactRefresh(), compress(), visualizer()],
 })
