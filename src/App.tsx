@@ -16,7 +16,7 @@ function App() {
   const [timelineList, setTimelineList] = useState<TimelineList|null>(null);
 
   return (
-    <Router basename={process.env.PUBLIC_URL}>
+    <Router>
       <div className="App">
         <Header user={user} setUser={setUser} timelineList={timelineList} />
         <Switch>

@@ -33,7 +33,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
   };
 
   const onSelectTimeList = (e: TimelineList) => {
-    window.location.assign(`${process.env.PUBLIC_URL}/timelines/${e.id}`);
+    window.location.assign(`/timelines/${e.id}`);
   };
 
   const onSearch = async (e: any) => {
@@ -53,7 +53,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
           userEmail,
         };
         const ret = await addTimelineList(t);
-        window.location.assign(`${process.env.PUBLIC_URL}/timelines/${ret.id}`);
+        window.location.assign(`${import.meta.env.PUBLIC_URL}/timelines/${ret.id}`);
       }
     };
 
@@ -74,7 +74,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
 
   const deleteTimeline = async (id: string) => {
     await deleteTimelineList(id);
-    window.location.assign(`${process.env.PUBLIC_URL}`);
+    window.location.assign(`${import.meta.env.PUBLIC_URL}`);
   };
 
   const TimelineBar = (params: any) => {
