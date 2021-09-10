@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import reactRefresh from '@vitejs/plugin-react-refresh'
+import compress from 'vite-plugin-compress'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -7,6 +8,7 @@ export default defineConfig({
   // comment this out if that isn't relevant for your project
   build: {
     outDir: 'build',
+    chunkSizeWarningLimit: 2000,
   },
-  plugins: [reactRefresh()],
+  plugins: [reactRefresh(), compress()],
 })
