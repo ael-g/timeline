@@ -64,7 +64,7 @@ const getPeople = async (name: string, signal: AbortSignal) : Promise<People[]> 
             FILTER(LANG(?label) = "fr" )
             FILTER(LANG(?desc) = "fr" )
           } ORDER BY ASC(?num) 
-          LIMIT 5`;
+          LIMIT 8`;
 
   const body = new URLSearchParams();
   body.append('query', query);
