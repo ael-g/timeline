@@ -135,7 +135,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
           <div className="SearchBar">
             { isLoading ? <CircularProgress style={{ color: 'grey' }} />
               : <Search />}
-            <input placeholder="Type something to find a timeline or create a new one..." type="text" onChange={onSearch} autoFocus />
+            <input placeholder="Chercher ou créer une nouvelle timeline" type="text" onChange={onSearch} autoFocus />
           </div>
           <Divider />
           <CreateTimeline />

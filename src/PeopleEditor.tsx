@@ -76,7 +76,7 @@ export default function PeopleEditor(params : PeopleEditorParamsType) {
             <div className="SearchBar">
               { isLoading
                 ? <CircularProgress style={{ color: 'grey' }} /> : <Search />}
-              <input placeholder="Search people..." type="text" onChange={onSearch} autoFocus />
+              <input placeholder="Chercher un personnage historique" type="text" onChange={onSearch} autoFocus />
             </div>
           </List>
           {peopleLocal.length ? <Divider /> : <></>}
