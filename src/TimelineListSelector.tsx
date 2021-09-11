@@ -62,7 +62,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
         ? (
           <div>
             <ListItem button onClick={createTimeline} style={{ display: 'flex', flexDirection: 'row' }}>
-              <Typography style={{ flex: '10' }}>Create timeline</Typography>
+              <Typography style={{ flex: '10' }}>Créer</Typography>
               <Typography style={{ fontStyle: 'italic', flex: '1' }}>{userSearch}</Typography>
             </ListItem>
             <Divider />
