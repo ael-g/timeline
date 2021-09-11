@@ -20,7 +20,6 @@ const PeopleDetails = (params: PeopleDetailsParamsType) => {
   } = params;
 
   const onDeletePeople = async () => {
-    console.log(people);
     await deletePeople(people);
     const peopleFirestore = await getPeople({
       id: timelineId,

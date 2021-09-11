@@ -84,8 +84,6 @@ const getPeople = async (name: string, signal: AbortSignal) : Promise<People[]> 
   }));
 
   people = people.filter((v:any, i:any, a:any) => a.findIndex((t:any) => (t.name === v.name)) === i);
-
-  console.log(people);
   return people;
 };
 
