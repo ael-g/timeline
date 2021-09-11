@@ -45,11 +45,6 @@ export default function Header(params : HeaderParams) {
       const name = timelineNameInput.current.value;
       isSavingName = true;
       await updateTimelineList(timelineList, name);
-      // setTimelineList({
-      //     id: timelineList.id,
-      //     name
-      // })
-      // timelineNameInput.current.value = name;
     }
     setDisplaySaveTimelineName(false);
   };
@@ -86,9 +81,9 @@ export default function Header(params : HeaderParams) {
                         onFocus={() => setOutlineInput(true)}
                         onBlur={onBlurInput}
                         style={{
-                          fontSize: '1.7rem',
+                          fontSize: 'min(6vw, 1.5rem)',
                           color: 'grey',
-                          width: '260px',
+                          width: '240px',
                           background: '#f0f0e9',
                           boxShadow: outlineInput ? '0 0 0 1pt grey' : '',
                           borderRadius: '2pt',

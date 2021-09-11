@@ -14,7 +14,7 @@
 .SearchBar input {
   margin: 10px;
   width: 100%;
-  font-size: 2rem;
+  font-size: min(3.5vw, 1.5rem);
   /* height: 40px; */
 }
 

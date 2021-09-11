@@ -32,7 +32,7 @@ export default function PeopleBar(params : PeopleBarParamsType) {
       <div className="Left">{people.bornDate}</div>
       <div className="Centered">
         <div style={{ fontWeight: 'bold' }}>{people.name}</div>
-        <div style={{ fontSize: '0.8rem' }}>{people.description}</div>
+        <div style={{ fontSize: 'min(3vw, 0.8rem)' }}>{people.description}</div>
       </div>
       <div className="Right">{people.deathDate}</div>
     </div>

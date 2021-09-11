@@ -101,7 +101,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
                 <Typography
                   key={timeline.name}
                   style={{
-                    fontSize: '1.5rem',
+                    fontSize: '1.3rem',
                     flex: '10 0 0',
                   }}
                 >
