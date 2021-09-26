@@ -10,6 +10,15 @@ import {
 import { TimelineList, User } from './types';
 import './TimelineListSelector.css';
 
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import randomcolor from 'randomcolor';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+
 type TimelineListSelectorParams = {
     user: User;
 }
@@ -129,7 +138,7 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
       <div className="TimelineListSelector">
         <List>
           <div className="SearchBar">
@@ -137,12 +146,34 @@ export default function TimelineListSelector(params: TimelineListSelectorParams)
               : <Search />}
             <input placeholder="Chercher ou créer une nouvelle timeline" type="text" onChange={onSearch} autoFocus />
           </div>
-          <Divider />
+          {/* <Divider /> */}
           <CreateTimeline />
         </List>
-        <List style={{ maxHeight: '40vh', overflow: 'scroll' }}>
-          {displayedTimelineLists.map((timeline) => <TimelineBar timeline={timeline} />)}
-        </List>
+      </div>
+      <div style={{width: '100%'}}>
+        <Swiper
+          modules={[Navigation, Pagination, Scrollbar, A11y]}
+          // spaceBetween={50}
+          slidesPerView={4}
+          navigation
+          pagination={{ clickable: true }}
+          // scrollbar={{ draggable: true }}
+          onSwiper={(swiper:any) => console.log(swiper)}
+          onSlideChange={() => console.log('slide change')}
+        >
+          {
+              displayedTimelineLists.map(t => 
+                <SwiperSlide> 
+                    <div className='slider-cards' onClick={() => onSelectTimeList(t)}>
+                      <div style={{background: randomcolor({seed: t.id}), borderRadius: '10px 10px 0 0', flex: '2 0 0'}}></div>
+                      <div style={{padding: '15px'}}>
+                        {t.name}
+                      </div>
+                    </div>
+                </SwiperSlide>
+              )
+            }
+      </Swiper>
       </div>
     </div>
   );

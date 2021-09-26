@@ -35,6 +35,22 @@ const getField = (obj: any, key :string) => {
 
 const capitalize = (s: string) : string => s.charAt(0).toUpperCase() + s.slice(1);
 
+const getEvents = (s: string) => {
+  // SELECT DISTINCT ?item ?label ?date ?dateLabel WHERE {
+  //   SERVICE wikibase:mwapi {
+  //     bd:serviceParam wikibase:endpoint "www.wikidata.org";
+  //                     wikibase:api "EntitySearch";
+  //                     mwapi:search "reconquista ";
+  //                     mwapi:language "fr".
+  //     ?item wikibase:apiOutputItem mwapi:item.
+  //     ?num wikibase:apiOrdinal true.
+  //   }
+  //   ?item wdt:P585 ?date.
+  //   ?item rdfs:label ?label .
+  //   FILTER(LANG(?label) = "fr" )
+  // } limit 500
+}
+
 const getPeople = async (name: string, signal: AbortSignal) : Promise<People[]> => {
   const query = `SELECT DISTINCT ?item ?label ?desc ?birth ?death ?picture ?wikipedia ?wikiquote WHERE {
             SERVICE wikibase:mwapi {

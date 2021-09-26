@@ -24,7 +24,10 @@ function App() {
             <Timeline user={user} timelineList={timelineList} setTimelineList={setTimelineList} />
           </Route>
           <Route path="/">
-            <TimelineListSelector user={user} />
+            <div style={{display: 'flex', justifyContent: 'center', marginTop: '80px', color: 'grey', fontSize: '3rem', fontWeight: 'bold'}}>
+              TimelineJS
+            </div>
+            <TimelineListSelector user={user}/>
           </Route>
         </Switch>
         <Footer />

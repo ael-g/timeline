@@ -3,6 +3,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import { Modal } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
+import HomeIcon from '@material-ui/icons/Home';
 import { signInPopup, disconnect, updateTimelineList } from './BackendController';
 import { User, TimelineList } from './types';
 
@@ -68,7 +69,7 @@ export default function Header(params : HeaderParams) {
         flexWrap: 'wrap',
       }}
       >
-        <a href="/" style={{ fontSize: '1.5rem', paddingRight: '30px' }}>TimelinesJS</a>
+        <a href="/" style={{paddingRight: '30px' }}><HomeIcon style={{fontSize: '2.5rem'}}/></a>
         {
                 timelineList
                   ? (
