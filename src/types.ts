@@ -11,6 +11,7 @@ type People = {
     wikipedia?: string;
     wikiquote?: string;
     timelineList?: string;
+    categories?: string[];
 };
 
 type User = firebase.User|null

@@ -83,7 +83,7 @@ export default function Header(params : HeaderParams) {
                         style={{
                           fontSize: 'min(6vw, 1.5rem)',
                           color: 'grey',
-                          width: '240px',
+                          width: '340px',
                           background: '#f0f0e9',
                           boxShadow: outlineInput ? '0 0 0 1pt grey' : '',
                           borderRadius: '2pt',

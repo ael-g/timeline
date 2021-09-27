@@ -26,6 +26,13 @@ const getPeople = async (timelineList: TimelineList) : Promise<any> => {
   return people;
 };
 
+const setPeopleCategories = async (people: People) : Promise<any> => {
+  const ret = await db.collection('people').doc(people.id).update({
+    categories: people.categories
+  })
+  return ret
+};
+
 const deletePeople = async (p: People) : Promise<any> => {
   await db.collection('people').doc(p.id).delete();
 };
@@ -53,6 +60,7 @@ const getSignedInUser = async () : Promise<any> => {
 
 export {
   getPeople,
+  setPeopleCategories,
   deletePeople,
   signInPopup,
   disconnect,

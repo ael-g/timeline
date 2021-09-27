@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { Add as AddIcon, Remove as RemoveIcon } from '@material-ui/icons';
+import { Add as AddIcon, ContactSupportOutlined, Remove as RemoveIcon } from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
 import { People, TimelineList, User } from './types';
 import PeopleEditor from './PeopleEditor';
+import randomcolor from 'randomcolor';
 import PeopleBar from './PeopleBar';
 import PeopleDetails from './PeopleDetails';
-import { getPeople } from './BackendController';
+import { getPeople, setPeopleCategories } from './BackendController';
 import db from './config/firebase';
 
 import './Timeline.css';
@@ -41,7 +42,20 @@ function Timeline(params: TimelineParams) {
   const [isOpenPeopleEditor, setIsOpenPeopleEditor] = useState<boolean>(false);
   const [isOpenPeopleDetails, setIsOpenPeopleDetails] = useState<boolean>(false);
 
+  const [categoriesMenuPeople, setCategoriesMenuPeople] = useState<People|null>(null);
+
+
   const [unit, setUnit] = useState<number>(25);
+
+  let categories :string[] = []
+  for (const p of people) {
+    if(p.categories) {
+      categories.push(...p.categories)
+    }
+  }
+  categories = [...new Set(categories)];
+  
+  console.log(categories)
 
   const setPeopleSelectedLocal = (p: People) => {
     setPeopleSelected(p);
@@ -109,15 +123,14 @@ function Timeline(params: TimelineParams) {
   };
 
   const computePeople = (items: any, min: number, max: number) => {
-    const people = [];
+    const peopleDisplay = [];
     for (let i = 0; i < items.length; i += 1) {
       const item = items[i];
 
       const width = 100 * ((item.deathDate - item.bornDate) / (max - min));
       const left = 100 * ((item.bornDate - min) / (max - min));
-      const marginTop = findMarginTop(people, item, i);
-
-      people.push({
+      const marginTop = findMarginTop(peopleDisplay, item, i);
+      peopleDisplay.push({
         width,
         left,
         id: item.id,
@@ -129,11 +142,12 @@ function Timeline(params: TimelineParams) {
         wikipedia: item.wikipedia,
         wikiquote: item.wikiquote,
         timelineList: item.timelineList,
+        categories: item.categories ? item.categories : [],
         marginTop,
       });
     }
 
-    return people;
+    return peopleDisplay;
   };
 
   const computeColumns = (people :any) => {
@@ -177,6 +191,73 @@ function Timeline(params: TimelineParams) {
 
   const isOwnTimeline = (user && timelineList && user.email === timelineList.userEmail) || false;
 
+  const addCategory = async (p:(People | null), c:string) => {
+    if(p && p.categories && !p.categories.includes(c)) {
+      p.categories.push(c)
+      await setPeopleCategories(p);
+      people.splice(people.findIndex((e) => e.id === p.id), 1, {...p});
+      setPeople([...people])
+    }
+  }
+
+  const removeCategory = async (p:(People | null), c:string) => {
+    if(p && p.categories && p.categories.includes(c)) {
+      p.categories.splice(p.categories.indexOf(c), 1)
+      await setPeopleCategories(p);
+      people.splice(people.findIndex((e) => e.id === p.id), 1, {...p});
+      setPeople([...people])
+    }
+  }
+
+  const CategoriesMenu = () => {
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
+    return (
+      <dialog
+        open={categoriesMenuPeople !== null}
+        // onClick={() => setCategoriesMenuPeople(null)} 
+        className='Category-menu'>
+        <div style={{display: 'flex', flexDirection: 'column', margin: '10px 0 0 10px'}}>
+          {categoriesMenuPeople?.name}
+          <div style={{display: 'flex', flexDirection: 'row', margin: '10px 0 10px 0'}}>
+            <input ref={inputRef} type='text' style={{width: '80%'}}></input>
+            <AddIcon onClick={() => addCategory(categoriesMenuPeople, inputRef.current? inputRef.current.value: '')}/>
+          </div>
+
+          {categoriesMenuPeople?.categories ? categoriesMenuPeople.categories.map(c => (
+            <div onClick={() => removeCategory(categoriesMenuPeople, c)} style={{display: 'flex', flexDirection: 'row', margin: '5px 0 5px  0'}}>
+            <div style={{
+              backgroundColor: randomcolor({seed: c}),
+              width: '20px',
+              height: '20px',
+              borderRadius: '8px',
+              marginRight: '5px'
+            }}></div>
+            {c}
+            </div>
+          )):<></>
+        }
+
+        <div style={{width: '100%', height: '1px', backgroundColor: 'grey'}}></div>
+
+        {categories.filter(c => !categoriesMenuPeople?.categories?.includes(c)).map(c => (
+          <div onClick={() => addCategory(categoriesMenuPeople, c)} style={{display: 'flex', flexDirection: 'row', margin: '5px 0 0 0'}}>
+          <div style={{
+            backgroundColor: randomcolor({seed: c}),
+            width: '20px',
+            height: '20px',
+            borderRadius: '8px',
+            marginRight: '5px'
+          }}></div>
+          {c}
+          </div>  
+          ))}
+        </div>
+      <button style={{position: 'absolute', bottom: '10px', fontSize: '18px'}} onClick={() => setCategoriesMenuPeople(null)}>Close</button>
+      </dialog>
+    )
+  }
+
   return (
     <div className="Timeline">
       <div className="Zoom">
@@ -205,7 +286,7 @@ function Timeline(params: TimelineParams) {
           columns.map((col) => (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {
-                col.map((i:any) => <PeopleBar people={i} setPeopleSelected={setPeopleSelectedLocal} />)
+                col.map((i:any) => <PeopleBar people={i} setPeopleSelected={setPeopleSelectedLocal} setCategoriesMenuPeople={setCategoriesMenuPeople}/>)
               }
             </div>
           ))
@@ -213,6 +294,7 @@ function Timeline(params: TimelineParams) {
           <div style={{ marginTop: `${marginTopMax}px` }} />
         </div>
       </div>
+      <CategoriesMenu/>
     </div>
   );
 }

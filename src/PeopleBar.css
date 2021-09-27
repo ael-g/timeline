@@ -36,18 +36,37 @@
 .Centered {
   display: flex;
   flex-direction: column;
-  flex: 2;
+  flex: 5;
   text-align: center;
   align-self: flex-start;
 }
 
 .Left {
-  flex: 1;
+  flex: 2;
   text-align: left;
 }
 
-.Right {
+.Categories {
   flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.CategoriesAdd-fadeOut {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s linear 200ms, opacity 200ms;
+}
+
+.CategoriesAdd-fadeIn {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s linear 0s, opacity 200ms;
+}
+
+.Right {
+  flex: 2;
   text-align: right;
 }
 
@@ -64,3 +83,4 @@
   color: rgb(50, 50, 50);
   background-color: rgba(75, 75, 61, 0.147);
 }
+

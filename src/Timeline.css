@@ -53,3 +53,21 @@
   color: rgba(128, 128, 62, 0.6);
   font-size: 20px;
 }
+
+.Category-menu {
+  position: absolute;
+  top: 20%;
+  height: 40%;
+  width: max(20%, 200px);
+  outline: none;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+}
+
+dialog::backdrop {
+  /* position: absolute;
+  top: 100px; 
+  right: 100px;  */
+  background-color: blue;
+}

@@ -81,6 +81,7 @@ const getPeople = async (name: string, signal: AbortSignal) : Promise<People[]> 
     wikipedia: getField(i, 'wikipedia'),
     wikiquote: getField(i, 'wikiquote'),
     description: capitalize(getField(i, 'desc')),
+    categories: []
   }));
 
   people = people.filter((v:any, i:any, a:any) => a.findIndex((t:any) => (t.name === v.name)) === i);
