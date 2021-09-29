@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { Add as AddIcon, ContactSupportOutlined, Remove as RemoveIcon } from '@material-ui/icons';
+import { Add as AddIcon, Close as CloseIcon, Remove as RemoveIcon } from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
 import { People, TimelineList, User } from './types';
 import PeopleEditor from './PeopleEditor';
@@ -215,17 +215,23 @@ function Timeline(params: TimelineParams) {
     return (
       <dialog
         open={categoriesMenuPeople !== null}
-        // onClick={() => setCategoriesMenuPeople(null)} 
         className='Category-menu'>
         <div style={{display: 'flex', flexDirection: 'column', margin: '10px 0 0 10px'}}>
-          {categoriesMenuPeople?.name}
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+            <div style={{fontWeight: 'bold'}}>
+              {categoriesMenuPeople?.name}
+            </div>
+            <div style={{color: '#495057'}} onClick={() => setCategoriesMenuPeople(null)}>
+              <CloseIcon/>
+            </div>
+          </div>
           <div style={{display: 'flex', flexDirection: 'row', margin: '10px 0 10px 0'}}>
             <input ref={inputRef} type='text' style={{width: '80%'}}></input>
             <AddIcon onClick={() => addCategory(categoriesMenuPeople, inputRef.current? inputRef.current.value: '')}/>
           </div>
 
           {categoriesMenuPeople?.categories ? categoriesMenuPeople.categories.map(c => (
-            <div onClick={() => removeCategory(categoriesMenuPeople, c)} style={{display: 'flex', flexDirection: 'row', margin: '5px 0 5px  0'}}>
+            <div onClick={() => removeCategory(categoriesMenuPeople, c)} style={{display: 'flex', flexDirection: 'row', margin: '5px 0 5px  0', cursor: 'pointer'}}>
             <div style={{
               backgroundColor: randomcolor({seed: c}),
               width: '20px',
@@ -241,7 +247,7 @@ function Timeline(params: TimelineParams) {
         <div style={{width: '100%', height: '1px', backgroundColor: 'grey'}}></div>
 
         {categories.filter(c => !categoriesMenuPeople?.categories?.includes(c)).map(c => (
-          <div onClick={() => addCategory(categoriesMenuPeople, c)} style={{display: 'flex', flexDirection: 'row', margin: '5px 0 0 0'}}>
+          <div onClick={() => addCategory(categoriesMenuPeople, c)} style={{display: 'flex', flexDirection: 'row', margin: '5px 0 0 0', cursor: 'pointer'}}>
           <div style={{
             backgroundColor: randomcolor({seed: c}),
             width: '20px',
@@ -253,7 +259,6 @@ function Timeline(params: TimelineParams) {
           </div>  
           ))}
         </div>
-      <button style={{position: 'absolute', bottom: '10px', fontSize: '18px'}} onClick={() => setCategoriesMenuPeople(null)}>Close</button>
       </dialog>
     )
   }
